@@ -3,956 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LootBox</title>
+    <title>LootBox TRPG</title>
+
+    <!-- PWA Home Screen Icon (Self-Contained SVG) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext y='70' x='15' font-size='70'%3E📦%3C/text%3E%3C/svg%3E">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext y='70' x='15' font-size='70'%3E📦%3C/text%3E%3C/svg%3E">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        amber: {
-                            450: '#F59E0B',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext y='70' x='15' font-size='70'%3E📦%3C/text%3E%3C/svg%3E">
 
-    <!-- Mobile Web App Metadata -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="LootBox">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0f172a">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Firebase App & Firestore via CDN (Modular v9/v10 compat mode for single file) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <!-- Firebase App & Firestore SDK (v10.7.1 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Initialization -->
     <script>
-        const firebaseConfig = {apiKey: "AIzaSyA...",authDomain: "lootbox-7162c.firebaseapp.com",projectId: "lootbox-7162c",
-                                storageBucket: "lootbox-7162c.firebasestorage.app", messagingSenderId: "128137949582", 
-                                appId: "1:128137949582:web:956634ae3b7341076774cf"};
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+      const firebaseConfig = {
+        apiKey: "AIzaSyA...",
+        authDomain: "lootbox-7162c.firebaseapp.com",
+        projectId: "lootbox-7162c",
+        storageBucket: "lootbox-7162c.firebasestorage.app",
+        messagingSenderId: "128137949582",
+        appId: "1:128137949582:web:956634ae3b7341076774cf"
+      };
+
+      if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+      }
+      const db = firebase.firestore();
     </script>
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-        }
-        h1, h2, h3, h4, .font-cinzel {
-            font-family: 'Cinzel', serif;
-        }
-        .bg-slate-950 { background-color: #020617; }
-        .border-amber-600\/30 { border-color: rgba(217, 119, 6, 0.3); }
-        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: #1e293b; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
-    </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col">
 
-    <!-- TOP BAR / HEADER -->
-    <header class="bg-slate-950 border-b border-amber-600/30 sticky top-0 z-40 shadow-lg">
-        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <!-- Dual-Tone Minimalist Emblem Logo -->
-                <svg viewBox="0 0 400 400" class="w-10 h-10 text-amber-500 drop-shadow" fill="none" stroke="currentColor">
-                    <circle cx="200" cy="180" r="160" stroke="#d97706" stroke-width="6" stroke-dasharray="8 4" opacity="0.6"/>
-                    <circle cx="200" cy="180" r="150" stroke="#d97706" stroke-width="3"/>
-                    <path d="M 140 80 Q 200 60 260 80 L 260 190 Q 200 270 140 190 Z" fill="#1e293b" stroke="#d97706" stroke-width="4"/>
-                    <path d="M 90 200 C 60 160 80 100 130 90 C 110 120 125 145 140 150 C 120 170 110 190 90 200 Z" fill="#d97706"/>
-                    <path d="M 310 200 C 340 160 320 100 270 90 C 290 120 275 145 260 150 C 280 170 290 190 310 200 Z" fill="#d97706"/>
-                    <rect x="155" y="150" width="90" height="65" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="4"/>
-                    <path d="M 150 150 Q 200 125 250 150 Z" fill="#d97706" stroke="#fbbf24" stroke-width="4"/>
-                    <circle cx="200" cy="180" r="7" fill="#fbbf24"/>
-                </svg>
-                <div>
-                    <h1 class="text-xl font-bold tracking-wider text-amber-500 flex items-center gap-1.5">
-                        LOOTBOX
-                        <span class="text-xs font-sans bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">TRPG</span>
-                    </h1>
-                    <p class="text-xs text-slate-400">RPG Inventory System</p>
-                </div>
-            </div>
-
-            <!-- Login / Character Profile Status -->
-            <div id="user-profile-bar" class="hidden items-center space-x-3">
-                <div class="text-right">
-                    <span id="display-user-name" class="font-bold text-amber-400 block text-sm">Character Name</span>
-                    <span id="display-user-role" class="text-xs text-slate-400">Player</span>
-                </div>
-                <button onclick="logout()" class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition" title="Log Out">
-                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                </button>
+    <!-- App Header -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 shadow-lg sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <h1 class="text-xl font-bold text-amber-400 flex items-center gap-2">
+                <span>📦</span> LootBox TRPG
+            </h1>
+            <div id="connection-status" class="text-xs px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
+                Connected
             </div>
         </div>
     </header>
 
-    <!-- NOTIFICATION TOAST -->
-    <div id="toast" class="fixed top-16 right-4 z-50 bg-amber-600 text-slate-950 px-4 py-3 rounded-lg shadow-xl font-medium hidden transform transition-all duration-300 flex items-center space-x-2">
-        <i data-lucide="bell" class="w-5 h-5"></i>
-        <span id="toast-message">Notification message</span>
-    </div>
-
-    <!-- MAIN APP CONTAINER -->
-    <main class="flex-grow max-w-4xl w-full mx-auto p-4 pb-24">
-
-        <!-- 1. LOGIN SCREEN -->
-        <section id="login-section" class="max-w-md mx-auto my-8 bg-slate-800/90 border border-amber-600/30 rounded-xl p-6 shadow-2xl backdrop-blur-sm">
-            <div class="text-center mb-6">
-                <div class="w-24 h-24 mx-auto mb-3">
-                    <svg viewBox="0 0 400 400" class="w-full h-full text-amber-500" fill="none" stroke="currentColor">
-                        <circle cx="200" cy="180" r="160" stroke="#d97706" stroke-width="6" stroke-dasharray="8 4" opacity="0.6"/>
-                        <circle cx="200" cy="180" r="150" stroke="#d97706" stroke-width="3"/>
-                        <path d="M 140 80 Q 200 60 260 80 L 260 190 Q 200 270 140 190 Z" fill="#1e293b" stroke="#d97706" stroke-width="4"/>
-                        <path d="M 90 200 C 60 160 80 100 130 90 C 110 120 125 145 140 150 C 120 170 110 190 90 200 Z" fill="#d97706"/>
-                        <path d="M 310 200 C 340 160 320 100 270 90 C 290 120 275 145 260 150 C 280 170 290 190 310 200 Z" fill="#d97706"/>
-                        <rect x="155" y="150" width="90" height="65" rx="6" fill="#0f172a" stroke="#fbbf24" stroke-width="4"/>
-                        <path d="M 150 150 Q 200 125 250 150 Z" fill="#d97706" stroke="#fbbf24" stroke-width="4"/>
-                        <circle cx="200" cy="180" r="7" fill="#fbbf24"/>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold text-amber-400">Welcome to LootBox</h2>
-                <p class="text-sm text-slate-400 mt-1">Sign in as a Player or Game Master</p>
+    <!-- Main Application View -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col gap-6">
+        
+        <!-- Role Selection Screen -->
+        <section id="role-select-screen" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-4">
+            <h2 class="text-lg font-semibold text-slate-200">Join Tabletop Session</h2>
+            <div class="flex flex-col gap-3">
+                <input type="text" id="session-code" placeholder="Session Room Name (e.g., Campaign1)" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
+                <input type="text" id="user-name" placeholder="Your Name / Character Name" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
             </div>
-
-            <form onsubmit="handleLogin(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-300 mb-1">Character / User Name</label>
-                    <input type="text" id="login-username" required placeholder="e.g. Valeros, Ezren, or DM" 
-                        class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2.5 text-slate-100 focus:outline-none focus:border-amber-500">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold uppercase text-slate-300 mb-1">Session Mode</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="flex items-center justify-center p-3 border border-slate-700 rounded-lg bg-slate-900/50 cursor-pointer hover:border-amber-500/50">
-                            <input type="radio" name="user-role" value="player" checked class="text-amber-500 focus:ring-amber-500">
-                            <span class="ml-2 text-sm font-medium">Player</span>
-                        </label>
-                        <label class="flex items-center justify-center p-3 border border-slate-700 rounded-lg bg-slate-900/50 cursor-pointer hover:border-amber-500/50">
-                            <input type="radio" name="user-role" value="dm" class="text-amber-500 focus:ring-amber-500">
-                            <span class="ml-2 text-sm font-medium">Dungeon Master</span>
-                        </label>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2">
-                    <i data-lucide="shield-check" class="w-5 h-5"></i> Enter Session
+            <div class="grid grid-cols-2 gap-4 mt-2">
+                <button onclick="joinSession('dm')" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-4 rounded-lg transition-colors">
+                    Login as Dungeon Master
                 </button>
-            </form>
+                <button onclick="joinSession('player')" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                    Login as Player
+                </button>
+            </div>
         </section>
 
-        <!-- APP CONTENT SECTIONS (Hidden until login) -->
-        <div id="app-content" class="hidden space-y-6">
+        <!-- DM Dashboard View (Hidden by Default) -->
+        <section id="dm-dashboard" class="hidden flex-col gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+                <h2 class="text-xl font-bold text-amber-400 mb-4">Dungeon Master Control Panel</h2>
+                <p class="text-sm text-slate-400 mb-4">Active Session: <span id="active-dm-room" class="text-slate-200 font-mono"></span></p>
+                <h3 class="text-md font-semibold text-slate-300 mb-2">Connected Party Members:</h3>
+                <div id="dm-player-list" class="flex flex-col gap-2">
+                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-400 text-sm">Waiting for players to join...</div>
+                </div>
+            </div>
+        </section>
 
-            <!-- PLAYER INVENTORY TAB -->
-            <section id="tab-inventory" class="tab-page space-y-6">
-                <!-- Coin Purse & Weight Bar -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Purse -->
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow">
-                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center justify-between">
-                            <span class="flex items-center gap-2"><i data-lucide="coins" class="w-4 h-4 text-amber-400"></i> Coin Purse</span>
-                            <button onclick="savePurse()" class="text-xs bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 px-2 py-1 rounded border border-amber-500/30">Update</button>
-                        </h3>
-                        <div class="grid grid-cols-4 gap-2 text-center">
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-700">
-                                <span class="text-xs text-cyan-400 font-bold block">PP</span>
-                                <input type="number" id="coin-pp" value="0" min="0" class="w-full bg-transparent text-center font-bold text-lg focus:outline-none">
-                            </div>
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-700">
-                                <span class="text-xs text-amber-400 font-bold block">GP</span>
-                                <input type="number" id="coin-gp" value="50" min="0" class="w-full bg-transparent text-center font-bold text-lg focus:outline-none">
-                            </div>
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-700">
-                                <span class="text-xs text-slate-300 font-bold block">SP</span>
-                                <input type="number" id="coin-sp" value="20" min="0" class="w-full bg-transparent text-center font-bold text-lg focus:outline-none">
-                            </div>
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-700">
-                                <span class="text-xs text-orange-400 font-bold block">CP</span>
-                                <input type="number" id="coin-cp" value="10" min="0" class="w-full bg-transparent text-center font-bold text-lg focus:outline-none">
-                            </div>
+        <!-- Player Sheet View (Hidden by Default) -->
+        <section id="player-dashboard" class="hidden flex-col gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-bold text-indigo-400" id="player-display-name">Character Sheet</h2>
+                    <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 font-mono" id="active-player-room"></span>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Gold Pieces</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span id="player-gold" class="text-2xl font-bold text-amber-400">0</span>
+                            <button onclick="updateGold(10)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2.5 py-1 rounded font-bold">+10</button>
                         </div>
                     </div>
-
-                    <!-- Carrying Capacity & Weight -->
-                    <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow flex flex-col justify-between">
-                        <div>
-                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
-                                <i data-lucide="weight" class="w-4 h-4 text-amber-400"></i> Carrying Capacity & Weight
-                            </h3>
-                            <div class="flex justify-between items-baseline mb-1">
-                                <span class="text-xs text-slate-400">Current Load:</span>
-                                <span class="text-lg font-bold text-slate-100"><span id="current-weight">0.0</span> / <span id="max-weight">150</span> lbs</span>
-                            </div>
-                            <div class="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
-                                <div id="weight-bar" class="bg-amber-500 h-full transition-all" style="width: 25%"></div>
-                            </div>
-                        </div>
-                        <p id="encumbrance-status" class="text-xs text-emerald-400 font-medium mt-2 flex items-center gap-1">
-                            <i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Light Load (Unencumbered)
-                        </p>
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Inventory Slots</span>
+                        <span class="text-2xl font-bold text-slate-200">3 / 10</span>
                     </div>
                 </div>
+            </div>
+        </section>
 
-                <!-- Weapons & Ammunition Section -->
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-base font-bold text-amber-400 flex items-center gap-2">
-                            <i data-lucide="sword" class="w-5 h-5"></i> Equipped Weapons & Ammunition
-                        </h3>
-                        <button onclick="openAddItemModal('weapon')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-1 border border-slate-600">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Weapon
-                        </button>
-                    </div>
-
-                    <div id="weapons-list" class="space-y-3">
-                        <!-- Weapon Item template populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- Backpack & Gear Section -->
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow">
-                    <div class="flex items-center justify-between mb-4">
-                        <h3 class="text-base font-bold text-amber-400 flex items-center gap-2">
-                            <i data-lucide="backpack" class="w-5 h-5"></i> Backpack & Gear Inventory
-                        </h3>
-                        <button onclick="openAddItemModal('item')" class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1.5 rounded-lg flex items-center gap-1 border border-slate-600">
-                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Gear
-                        </button>
-                    </div>
-
-                    <div id="inventory-list" class="space-y-2">
-                        <!-- Inventory list items -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- SHOPS TAB (Town & Wandering Merchant) -->
-            <section id="tab-shops" class="tab-page hidden space-y-6">
-                <div class="flex items-center justify-between bg-slate-800 p-4 rounded-xl border border-slate-700">
-                    <div>
-                        <h2 class="text-lg font-bold text-amber-400 flex items-center gap-2">
-                            <i data-lucide="shopping-bag" class="w-5 h-5"></i> Merchant & Supplies
-                        </h2>
-                        <p class="text-xs text-slate-400">Spend your gold and silver on adventuring equipment</p>
-                    </div>
-                    <!-- Merchant Mode Toggle -->
-                    <div class="flex bg-slate-900 p-1 rounded-lg border border-slate-700 text-xs">
-                        <button id="shop-mode-town" onclick="switchShopMode('town')" class="px-3 py-1.5 rounded-md font-medium bg-amber-600 text-slate-950 shadow">Town Market</button>
-                        <button id="shop-mode-wandering" onclick="switchShopMode('wandering')" class="px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-slate-200">Wandering Merchant</button>
-                    </div>
-                </div>
-
-                <!-- Shop Items Grid -->
-                <div id="shop-items-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Dynamic Shop Items -->
-                </div>
-            </section>
-
-            <!-- TAVERN & INN TAB -->
-            <section id="tab-tavern" class="tab-page hidden space-y-6">
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-6 shadow-xl relative overflow-hidden">
-                    <div class="absolute -right-6 -top-6 text-amber-500/10 pointer-events-none">
-                        <i data-lucide="beer" class="w-48 h-48"></i>
-                    </div>
-
-                    <div class="mb-6">
-                        <h2 class="text-2xl font-bold text-amber-400 flex items-center gap-2">
-                            <i data-lucide="beer" class="w-6 h-6"></i> The Rusty Anchor Tavern & Inn
-                        </h2>
-                        <p class="text-sm text-slate-300">Hearty meals, cold ales, and warm beds for weary heroes.</p>
-                    </div>
-
-                    <!-- Tavern Sub-sections Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Food & Drinks Menu -->
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider border-b border-slate-700 pb-2 flex items-center gap-2">
-                                <i data-lucide="utensils" class="w-4 h-4"></i> Tavern Menu
-                            </h3>
-                            <div class="space-y-3">
-                                <div class="flex items-center justify-between p-3 bg-slate-900 rounded-lg border border-slate-700">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Hearty Stew & Fresh Bread</div>
-                                        <div class="text-xs text-slate-400">Fills your belly before a dungeon run</div>
-                                    </div>
-                                    <button onclick="buyTavernItem('Hearty Stew', 3, 'sp')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold flex items-center gap-1">
-                                        3 SP
-                                    </button>
-                                </div>
-
-                                <div class="flex items-center justify-between p-3 bg-slate-900 rounded-lg border border-slate-700">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Dwarven Stout Mug</div>
-                                        <div class="text-xs text-slate-400">Strong dark ale with rich foam</div>
-                                    </div>
-                                    <button onclick="buyTavernItem('Dwarven Stout', 1, 'sp')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold flex items-center gap-1">
-                                        1 SP
-                                    </button>
-                                </div>
-
-                                <div class="flex items-center justify-between p-3 bg-slate-900 rounded-lg border border-slate-700">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Elven Fine Wine Pitcher</div>
-                                        <div class="text-xs text-slate-400">Crisp floral vintage from Kyonin</div>
-                                    </div>
-                                    <button onclick="buyTavernItem('Elven Fine Wine', 2, 'gp')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold flex items-center gap-1">
-                                        2 GP
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Lodging & Rest Options -->
-                        <div class="space-y-4">
-                            <h3 class="text-sm font-bold text-amber-400 uppercase tracking-wider border-b border-slate-700 pb-2 flex items-center gap-2">
-                                <i data-lucide="bed" class="w-4 h-4"></i> Inn Lodging & Resting
-                            </h3>
-                            <div class="space-y-3">
-                                <div class="p-3 bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Common Floor Cot</div>
-                                        <div class="text-xs text-slate-400">Short Rest • Basic recovery</div>
-                                    </div>
-                                    <button onclick="payLodging('Common Cot', 2, 'sp', 'short')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold">
-                                        2 SP
-                                    </button>
-                                </div>
-
-                                <div class="p-3 bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Private Room</div>
-                                        <div class="text-xs text-slate-400">Long Rest • Full HP & Spell recovery</div>
-                                    </div>
-                                    <button onclick="payLodging('Private Room', 1, 'gp', 'long')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold">
-                                        1 GP
-                                    </button>
-                                </div>
-
-                                <div class="p-3 bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-between">
-                                    <div>
-                                        <div class="font-semibold text-slate-200 text-sm">Noble Suite</div>
-                                        <div class="text-xs text-slate-400">Long Rest + Temporary HP Bonus</div>
-                                    </div>
-                                    <button onclick="payLodging('Noble Suite', 5, 'gp', 'long-heroic')" class="px-3 py-1.5 bg-amber-600/20 text-amber-400 hover:bg-amber-600/30 rounded border border-amber-500/30 text-xs font-bold">
-                                        5 GP
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- DUNGEON MASTER DASHBOARD TAB -->
-            <section id="tab-dm" class="tab-page hidden space-y-6">
-                <!-- DM Player Selector Bar -->
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow">
-                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
-                        <i data-lucide="users" class="w-4 h-4 text-amber-400"></i> Active Party Members
-                    </h3>
-                    <div id="dm-player-buttons" class="flex flex-wrap gap-2">
-                        <!-- Player selection buttons populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- DM Selected Player View -->
-                <div id="dm-player-detail" class="bg-slate-800 border border-slate-700 rounded-xl p-5 shadow space-y-4">
-                    <p class="text-slate-400 text-sm italic">Select a player button above to inspect their live inventory and coin purse.</p>
-                </div>
-
-                <!-- DM LOOT & TREASURE DISTRIBUTION TOOLS -->
-                <div class="bg-slate-800 border border-amber-600/30 rounded-xl p-5 shadow space-y-4">
-                    <h3 class="text-base font-bold text-amber-400 flex items-center gap-2 border-b border-slate-700 pb-3">
-                        <i data-lucide="gift" class="w-5 h-5"></i> DM Treasure & Loot Distribution
-                    </h3>
-
-                    <!-- Quick Reward Preset Buttons -->
-                    <div class="space-y-2">
-                        <label class="text-xs text-slate-400 font-semibold block uppercase">Quick One-Click Loot</label>
-                        <div class="flex flex-wrap gap-2">
-                            <button onclick="grantQuickLoot('all', 'coins', {gp: 10})" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded text-xs font-medium text-amber-300">
-                                +10 GP to All
-                            </button>
-                            <button onclick="grantQuickLoot('all', 'coins', {gp: 50})" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded text-xs font-medium text-amber-300">
-                                +50 GP to All
-                            </button>
-                            <button onclick="grantQuickLoot('all', 'item', {name: 'Healing Potion', weight: 0.5, qty: 1})" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-700 border border-slate-700 rounded text-xs font-medium text-emerald-300">
-                                +1 Healing Potion All
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Custom Coin / Item Award Form -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-900/60 p-4 rounded-lg border border-slate-700/60">
-                        <!-- Give Coins -->
-                        <form onsubmit="handleDMCoinGrant(event)" class="space-y-3">
-                            <h4 class="text-xs font-bold uppercase text-amber-400">Award Coins</h4>
-                            <div class="grid grid-cols-2 gap-2">
-                                <select id="dm-grant-coin-target" class="bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                                    <option value="all">Entire Party</option>
-                                </select>
-                                <select id="dm-grant-coin-type" class="bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                                    <option value="gp">Gold (GP)</option>
-                                    <option value="pp">Platinum (PP)</option>
-                                    <option value="sp">Silver (SP)</option>
-                                    <option value="cp">Copper (CP)</option>
-                                </select>
-                            </div>
-                            <input type="number" id="dm-grant-coin-amount" placeholder="Amount (e.g. 25)" min="1" required class="w-full bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                            <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2 rounded text-xs">
-                                Grant Coins
-                            </button>
-                        </form>
-
-                        <!-- Send Custom Item -->
-                        <form onsubmit="handleDMItemGrant(event)" class="space-y-3">
-                            <h4 class="text-xs font-bold uppercase text-amber-400">Award Custom Item / Weapon</h4>
-                            <select id="dm-grant-item-target" class="w-full bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                                <option value="all">Entire Party</option>
-                            </select>
-                            <input type="text" id="dm-grant-item-name" placeholder="Item Name (e.g. +1 Longsword)" required class="w-full bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                            <div class="grid grid-cols-2 gap-2">
-                                <input type="number" id="dm-grant-item-weight" placeholder="Weight (lbs)" step="0.1" value="1" class="bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                                <input type="number" id="dm-grant-item-qty" placeholder="Qty" value="1" min="1" class="bg-slate-900 border border-slate-700 text-xs rounded p-2 text-slate-200">
-                            </div>
-                            <button type="submit" class="w-full bg-slate-700 hover:bg-slate-600 text-slate-100 font-bold py-2 rounded text-xs border border-slate-600">
-                                Send Item to Inventory
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </section>
-        </div>
     </main>
 
-    <!-- BOTTOM NAVIGATION BAR -->
-    <nav id="bottom-nav" class="hidden fixed bottom-0 left-0 right-0 bg-slate-950 border-t border-amber-600/30 z-40 shadow-2xl">
-        <div class="max-w-md mx-auto grid grid-cols-4 py-2">
-            <button onclick="switchTab('inventory')" id="nav-btn-inventory" class="flex flex-col items-center justify-center text-amber-500">
-                <i data-lucide="backpack" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium mt-1">Inventory</span>
-            </button>
-            <button onclick="switchTab('shops')" id="nav-btn-shops" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-200">
-                <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium mt-1">Shops</span>
-            </button>
-            <button onclick="switchTab('tavern')" id="nav-btn-tavern" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-200">
-                <i data-lucide="beer" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium mt-1">Tavern</span>
-            </button>
-            <button onclick="switchTab('dm')" id="nav-btn-dm" class="flex flex-col items-center justify-center text-slate-400 hover:text-slate-200">
-                <i data-lucide="crown" class="w-5 h-5"></i>
-                <span class="text-[10px] font-medium mt-1">DM Panel</span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- ADD ITEM MODAL -->
-    <div id="add-item-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-xl max-w-sm w-full p-5 shadow-2xl space-y-4">
-            <h3 id="modal-title" class="text-base font-bold text-amber-400">Add Item</h3>
-            <form onsubmit="handleSaveCustomItem(event)" class="space-y-3">
-                <input type="hidden" id="modal-item-type" value="item">
-                <div>
-                    <label class="block text-xs text-slate-300 font-semibold mb-1">Name</label>
-                    <input type="text" id="modal-item-name" required class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs text-slate-300 font-semibold mb-1">Weight (lbs)</label>
-                        <input type="number" id="modal-item-weight" step="0.1" value="1.0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                    </div>
-                    <div>
-                        <label class="block text-xs text-slate-300 font-semibold mb-1">Quantity</label>
-                        <input type="number" id="modal-item-qty" value="1" min="1" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                    </div>
-                </div>
-                <div id="modal-ammo-field" class="hidden">
-                    <label class="block text-xs text-slate-300 font-semibold mb-1">Ammunition Count</label>
-                    <input type="number" id="modal-item-ammo" value="20" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                </div>
-                <div class="flex gap-2 pt-2">
-                    <button type="button" onclick="closeAddItemModal()" class="w-1/2 bg-slate-700 text-slate-300 py-2 rounded text-xs font-bold">Cancel</button>
-                    <button type="submit" class="w-1/2 bg-amber-600 hover:bg-amber-500 text-slate-950 py-2 rounded text-xs font-bold">Save Item</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- APP JAVASCRIPT & FIRESTORE LOGIC -->
+    <!-- Application Controller Script -->
     <script>
-        // --- 1. MOCK FIRESTORE LOCAL STORAGE FALLBACK ---
-        // Works out-of-the-box locally without setup, but seamlessly integrates with cloud Firestore
-        let state = {
-            currentUser: null,
-            role: 'player', // 'player' or 'dm'
-            players: JSON.parse(localStorage.getItem('lootbox_players') || '{}')
-        };
+        let currentRoom = "";
+        let currentRole = "";
+        let playerName = "";
 
-        const defaultShopItems = [
-            { id: 's1', name: 'Healing Potion (Minor)', cost: 50, coin: 'gp', weight: 0.5, category: 'town', desc: 'Restores 2d4+2 HP' },
-            { id: 's2', name: 'Ration Pack (5 Days)', cost: 2, coin: 'gp', weight: 10, category: 'town', desc: 'Nutritious traveling rations' },
-            { id: 's3', name: 'Trail Rope (50 ft)', cost: 1, coin: 'gp', weight: 10, category: 'town', desc: 'Durable hempen rope' },
-            { id: 's4', name: 'Masterwork Dagger', cost: 302, coin: 'gp', weight: 1, category: 'wandering', desc: '+1 to attack rolls' },
-            { id: 's5', name: 'Scroll of Invisibility', cost: 150, coin: 'gp', weight: 0.1, category: 'wandering', desc: 'Single-use arcana scroll' }
-        ];
+        function joinSession(role) {
+            currentRoom = document.getElementById("session-code").value.trim();
+            playerName = document.getElementById("user-name").value.trim();
+            currentRole = role;
 
-        // Ensure default player structure
-        function getPlayerData(username) {
-            if (!state.players[username]) {
-                state.players[username] = {
-                    name: username,
-                    coins: { pp: 0, gp: 50, sp: 20, cp: 10 },
-                    maxWeight: 150,
-                    weapons: [
-                        { id: 'w1', name: 'Longbow', weight: 2, qty: 1, ammo: 20 },
-                        { id: 'w2', name: 'Shortsword', weight: 2, qty: 1, ammo: 0 }
-                    ],
-                    items: [
-                        { id: 'i1', name: 'Bedroll', weight: 5, qty: 1 },
-                        { id: 'i2', name: 'Torch', weight: 1, qty: 5 }
-                    ]
-                };
-                saveState();
-            }
-            return state.players[username];
-        }
-
-        function saveState() {
-            localStorage.setItem('lootbox_players', JSON.stringify(state.players));
-            updateDMView();
-        }
-
-        // --- 2. LOGIN & TAB MANAGEMENT ---
-        function handleLogin(e) {
-            e.preventDefault();
-            const username = document.getElementById('login-username').value.trim();
-            const role = document.querySelector('input[name="user-role"]:checked').value;
-
-            if (!username) return;
-
-            state.currentUser = username;
-            state.role = role;
-
-            // UI updates
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('app-content').classList.remove('hidden');
-            document.getElementById('bottom-nav').classList.remove('hidden');
-            document.getElementById('user-profile-bar').classList.remove('hidden');
-            document.getElementById('user-profile-bar').classList.add('flex');
-            
-            document.getElementById('display-user-name').innerText = username;
-            document.getElementById('display-user-role').innerText = role === 'dm' ? 'Dungeon Master' : 'Player Character';
-
-            if (role === 'dm') {
-                switchTab('dm');
-            } else {
-                getPlayerData(username);
-                renderPlayerInventory();
-                switchTab('inventory');
-            }
-
-            renderShops('town');
-            updateDMTargetDropdowns();
-            showToast(`Welcome, ${username}!`);
-        }
-
-        function logout() {
-            state.currentUser = null;
-            document.getElementById('login-section').classList.remove('hidden');
-            document.getElementById('app-content').classList.add('hidden');
-            document.getElementById('bottom-nav').classList.add('hidden');
-            document.getElementById('user-profile-bar').classList.add('hidden');
-            document.getElementById('user-profile-bar').classList.remove('flex');
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
-            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-
-            // Reset tab button colors
-            ['inventory', 'shops', 'tavern', 'dm'].forEach(id => {
-                const btn = document.getElementById(`nav-btn-${id}`);
-                if (id === tabId) {
-                    btn.className = 'flex flex-col items-center justify-center text-amber-500';
-                } else {
-                    btn.className = 'flex flex-col items-center justify-center text-slate-400 hover:text-slate-200';
-                }
-            });
-
-            if (tabId === 'dm') updateDMView();
-            lucide.createIcons();
-        }
-
-        // --- 3. INVENTORY & WEIGHT LOGIC ---
-        function renderPlayerInventory() {
-            if (!state.currentUser || state.role === 'dm') return;
-            const p = getPlayerData(state.currentUser);
-
-            // Populate Coins
-            document.getElementById('coin-pp').value = p.coins.pp;
-            document.getElementById('coin-gp').value = p.coins.gp;
-            document.getElementById('coin-sp').value = p.coins.sp;
-            document.getElementById('coin-cp').value = p.coins.cp;
-
-            // Render Weapons
-            const weaponsEl = document.getElementById('weapons-list');
-            weaponsEl.innerHTML = p.weapons.map(w => `
-                <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 flex items-center justify-between">
-                    <div>
-                        <div class="font-bold text-slate-200 text-sm flex items-center gap-2">
-                            ${w.name} <span class="text-xs text-slate-400 font-normal">(${w.weight} lbs)</span>
-                        </div>
-                        ${w.ammo > 0 ? `<div class="text-xs text-amber-400 mt-0.5">Ammo: ${w.ammo} rounds</div>` : ''}
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        ${w.ammo > 0 ? `
-                            <button onclick="adjustAmmo('${w.id}', -1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded flex items-center justify-center font-bold text-xs">-1</button>
-                            <button onclick="adjustAmmo('${w.id}', 1)" class="w-7 h-7 bg-slate-800 hover:bg-slate-700 text-amber-400 border border-slate-700 rounded flex items-center justify-center font-bold text-xs">+1</button>
-                        ` : ''}
-                        <button onclick="deleteItem('${w.id}', 'weapon')" class="text-slate-500 hover:text-red-400 p-1.5"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-500 italic">No equipped weapons.</p>';
-
-            // Render Items
-            const itemsEl = document.getElementById('inventory-list');
-            itemsEl.innerHTML = p.items.map(i => `
-                <div class="bg-slate-900 border border-slate-700 rounded-lg p-3 flex items-center justify-between">
-                    <div>
-                        <div class="font-semibold text-slate-200 text-sm">${i.name}</div>
-                        <div class="text-xs text-slate-400">${i.weight} lbs each</div>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <div class="flex items-center space-x-1 bg-slate-800 border border-slate-700 rounded px-2 py-1">
-                            <button onclick="adjustQty('${i.id}', -1)" class="text-slate-400 hover:text-amber-400 text-xs font-bold px-1">-</button>
-                            <span class="text-xs font-bold text-slate-200 px-1">${i.qty}</span>
-                            <button onclick="adjustQty('${i.id}', 1)" class="text-slate-400 hover:text-amber-400 text-xs font-bold px-1">+</button>
-                        </div>
-                        <button onclick="deleteItem('${i.id}', 'item')" class="text-slate-500 hover:text-red-400 p-1"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                    </div>
-                </div>
-            `).join('') || '<p class="text-xs text-slate-500 italic">Backpack is empty.</p>';
-
-            calculateWeight(p);
-            lucide.createIcons();
-        }
-
-        function calculateWeight(player) {
-            let total = 0;
-            player.weapons.forEach(w => total += (w.weight * (w.qty || 1)));
-            player.items.forEach(i => total += (i.weight * i.qty));
-            
-            // Coin weight rule (50 coins = 1 lb)
-            const coinCount = player.coins.pp + player.coins.gp + player.coins.sp + player.coins.cp;
-            total += (coinCount / 50);
-
-            document.getElementById('current-weight').innerText = total.toFixed(1);
-            document.getElementById('max-weight').innerText = player.maxWeight;
-
-            const pct = Math.min(100, (total / player.maxWeight) * 100);
-            const bar = document.getElementById('weight-bar');
-            bar.style.width = `${pct}%`;
-
-            if (pct > 90) {
-                bar.className = 'bg-red-500 h-full transition-all';
-                document.getElementById('encumbrance-status').innerHTML = '<span class="text-red-400 flex items-center gap-1"><i data-lucide="alert-triangle" class="w-3.5 h-3.5"></i> Heavy Load (Encumbered)</span>';
-            } else {
-                bar.className = 'bg-amber-500 h-full transition-all';
-                document.getElementById('encumbrance-status').innerHTML = '<span class="text-emerald-400 flex items-center gap-1"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> Light Load (Unencumbered)</span>';
-            }
-        }
-
-        function savePurse() {
-            const p = getPlayerData(state.currentUser);
-            p.coins.pp = parseInt(document.getElementById('coin-pp').value) || 0;
-            p.coins.gp = parseInt(document.getElementById('coin-gp').value) || 0;
-            p.coins.sp = parseInt(document.getElementById('coin-sp').value) || 0;
-            p.coins.cp = parseInt(document.getElementById('coin-cp').value) || 0;
-            saveState();
-            calculateWeight(p);
-            showToast('Purse updated!');
-        }
-
-        function adjustAmmo(id, delta) {
-            const p = getPlayerData(state.currentUser);
-            const w = p.weapons.find(x => x.id === id);
-            if (w) {
-                w.ammo = Math.max(0, w.ammo + delta);
-                saveState();
-                renderPlayerInventory();
-            }
-        }
-
-        function adjustQty(id, delta) {
-            const p = getPlayerData(state.currentUser);
-            const i = p.items.find(x => x.id === id);
-            if (i) {
-                i.qty += delta;
-                if (i.qty <= 0) p.items = p.items.filter(x => x.id !== id);
-                saveState();
-                renderPlayerInventory();
-            }
-        }
-
-        function deleteItem(id, type) {
-            const p = getPlayerData(state.currentUser);
-            if (type === 'weapon') p.weapons = p.weapons.filter(x => x.id !== id);
-            else p.items = p.items.filter(x => x.id !== id);
-            saveState();
-            renderPlayerInventory();
-        }
-
-        // Modal for Custom Items
-        function openAddItemModal(type) {
-            document.getElementById('modal-item-type').value = type;
-            document.getElementById('modal-title').innerText = type === 'weapon' ? 'Add Weapon' : 'Add Gear Item';
-            document.getElementById('modal-ammo-field').classList.toggle('hidden', type !== 'weapon');
-            document.getElementById('add-item-modal').classList.remove('hidden');
-        }
-
-        function closeAddItemModal() {
-            document.getElementById('add-item-modal').classList.add('hidden');
-        }
-
-        function handleSaveCustomItem(e) {
-            e.preventDefault();
-            const p = getPlayerData(state.currentUser);
-            const type = document.getElementById('modal-item-type').value;
-            const name = document.getElementById('modal-item-name').value.trim();
-            const weight = parseFloat(document.getElementById('modal-item-weight').value) || 0;
-            const qty = parseInt(document.getElementById('modal-item-qty').value) || 1;
-
-            if (type === 'weapon') {
-                const ammo = parseInt(document.getElementById('modal-item-ammo').value) || 0;
-                p.weapons.push({ id: 'w_' + Date.now(), name, weight, qty, ammo });
-            } else {
-                p.items.push({ id: 'i_' + Date.now(), name, weight, qty });
-            }
-
-            saveState();
-            closeAddItemModal();
-            renderPlayerInventory();
-            showToast(`Added ${name}`);
-        }
-
-        // --- 4. SHOPS & MERCHANTS ---
-        function switchShopMode(mode) {
-            document.getElementById('shop-mode-town').className = mode === 'town' 
-                ? 'px-3 py-1.5 rounded-md font-medium bg-amber-600 text-slate-950 shadow'
-                : 'px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-slate-200';
-            document.getElementById('shop-mode-wandering').className = mode === 'wandering' 
-                ? 'px-3 py-1.5 rounded-md font-medium bg-amber-600 text-slate-950 shadow'
-                : 'px-3 py-1.5 rounded-md font-medium text-slate-400 hover:text-slate-200';
-            renderShops(mode);
-        }
-
-        function renderShops(category) {
-            const container = document.getElementById('shop-items-container');
-            const items = defaultShopItems.filter(i => i.category === category);
-
-            container.innerHTML = items.map(item => `
-                <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 shadow flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between">
-                            <h4 class="font-bold text-slate-100 text-sm">${item.name}</h4>
-                            <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">${item.cost} ${item.coin.toUpperCase()}</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1">${item.desc}</p>
-                        <div class="text-[11px] text-slate-500 mt-2">Weight: ${item.weight} lbs</div>
-                    </div>
-                    <button onclick="buyShopItem('${item.name}', ${item.cost}, '${item.coin}', ${item.weight})" 
-                        class="mt-4 w-full bg-slate-700 hover:bg-amber-600 hover:text-slate-950 text-amber-400 border border-slate-600 font-bold py-2 rounded-lg text-xs transition flex items-center justify-center gap-1">
-                        <i data-lucide="shopping-cart" class="w-3.5 h-3.5"></i> Purchase Item
-                    </button>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        }
-
-        function buyShopItem(name, cost, coinType, weight) {
-            if (state.role === 'dm') return showToast('DMs cannot buy items directly.');
-            const p = getPlayerData(state.currentUser);
-
-            if (p.coins[coinType] < cost) {
-                return showToast(`Not enough ${coinType.toUpperCase()}! Needed: ${cost}`);
-            }
-
-            p.coins[coinType] -= cost;
-            p.items.push({ id: 'i_' + Date.now(), name, weight, qty: 1 });
-            saveState();
-            renderPlayerInventory();
-            showToast(`Purchased ${name}!`);
-        }
-
-        // --- 5. TAVERN & INN LOGIC ---
-        function buyTavernItem(itemName, cost, coinType) {
-            if (state.role === 'dm') return showToast('DMs cannot purchase items.');
-            const p = getPlayerData(state.currentUser);
-
-            if (p.coins[coinType] < cost) {
-                return showToast(`Not enough ${coinType.toUpperCase()}! Needed: ${cost}`);
-            }
-
-            p.coins[coinType] -= cost;
-            saveState();
-            renderPlayerInventory();
-            showToast(`Enjoyed ${itemName}! (${cost} ${coinType.toUpperCase()} deducted)`);
-        }
-
-        function payLodging(roomType, cost, coinType, restEffect) {
-            if (state.role === 'dm') return showToast('DMs cannot book rooms.');
-            const p = getPlayerData(state.currentUser);
-
-            if (p.coins[coinType] < cost) {
-                return showToast(`Not enough ${coinType.toUpperCase()} for lodging!`);
-            }
-
-            p.coins[coinType] -= cost;
-            saveState();
-            renderPlayerInventory();
-            
-            const effectText = restEffect.includes('long') ? 'Full Long Rest recovery applied!' : 'Short Rest benefits applied!';
-            showToast(`Rented ${roomType}. ${effectText}`);
-        }
-
-        // --- 6. DUNGEON MASTER DASHBOARD & REWARDS ---
-        function updateDMView() {
-            const btnContainer = document.getElementById('dm-player-buttons');
-            const players = Object.keys(state.players);
-
-            if (players.length === 0) {
-                btnContainer.innerHTML = '<p class="text-xs text-slate-500 italic">No players joined yet.</p>';
+            if (!currentRoom || !playerName) {
+                alert("Please enter both a session room name and your name.");
                 return;
             }
 
-            btnContainer.innerHTML = players.map(name => `
-                <button onclick="inspectPlayer('${name}')" class="px-3 py-1.5 bg-slate-900 hover:bg-amber-600 hover:text-slate-950 border border-slate-700 text-slate-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5">
-                    <i data-lucide="user" class="w-3.5 h-3.5"></i> ${name}
-                </button>
-            `).join('');
-            
-            updateDMTargetDropdowns();
-            lucide.createIcons();
+            document.getElementById("role-select-screen").classList.add("hidden");
+
+            if (role === 'dm') {
+                document.getElementById("dm-dashboard").classList.remove("hidden");
+                document.getElementById("active-dm-room").innerText = currentRoom;
+                initDMListener();
+            } else {
+                document.getElementById("player-dashboard").classList.remove("hidden");
+                document.getElementById("player-display-name").innerText = playerName;
+                document.getElementById("active-player-room").innerText = currentRoom;
+                initPlayerSync();
+            }
         }
 
-        function inspectPlayer(name) {
-            const p = state.players[name];
-            if (!p) return;
-
-            const detailEl = document.getElementById('dm-player-detail');
-            detailEl.innerHTML = `
-                <div class="flex items-center justify-between border-b border-slate-700 pb-3">
-                    <div>
-                        <h3 class="text-lg font-bold text-amber-400">${p.name}'s Inventory Sheet</h3>
-                        <span class="text-xs text-slate-400">Inspected by DM</span>
-                    </div>
-                    <div class="text-xs font-bold bg-slate-900 border border-slate-700 px-3 py-1.5 rounded-lg text-amber-300">
-                        Purse: ${p.coins.pp} PP | ${p.coins.gp} GP | ${p.coins.sp} SP | ${p.coins.cp} CP
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                    <div>
-                        <h4 class="font-bold text-slate-300 mb-2 uppercase">Weapons (${p.weapons.length})</h4>
-                        <ul class="space-y-1">
-                            ${p.weapons.map(w => `<li class="bg-slate-900 p-2 rounded border border-slate-700 flex justify-between"><span>${w.name}</span> <span class="text-amber-400">Ammo: ${w.ammo}</span></li>`).join('') || '<li class="text-slate-500 italic">None</li>'}
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-300 mb-2 uppercase">Gear & Items (${p.items.length})</h4>
-                        <ul class="space-y-1">
-                            ${p.items.map(i => `<li class="bg-slate-900 p-2 rounded border border-slate-700 flex justify-between"><span>${i.name}</span> <span class="text-slate-400">Qty: ${i.qty}</span></li>`).join('') || '<li class="text-slate-500 italic">None</li>'}
-                        </ul>
-                    </div>
-                </div>
-            `;
+        function initPlayerSync() {
+            const playerRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
+            playerRef.set({
+                name: playerName,
+                gold: 50,
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+            }, { merge: true });
         }
 
-        function updateDMTargetDropdowns() {
-            const targets = ['dm-grant-coin-target', 'dm-grant-item-target'];
-            const players = Object.keys(state.players);
-
-            targets.forEach(id => {
-                const select = document.getElementById(id);
-                if (!select) return;
-                select.innerHTML = '<option value="all">Entire Party</option>' + 
-                    players.map(name => `<option value="${name}">${name}</option>`).join('');
+        function updateGold(amount) {
+            const playerRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
+            playerRef.get().then((doc) => {
+                let currentGold = doc.exists ? (doc.data().gold || 0) : 0;
+                playerRef.update({ gold: currentGold + amount });
+                document.getElementById("player-gold").innerText = currentGold + amount;
             });
         }
 
-        function grantQuickLoot(target, type, data) {
-            const targets = target === 'all' ? Object.keys(state.players) : [target];
-            targets.forEach(name => {
-                const p = state.players[name];
-                if (type === 'coins') {
-                    if (data.gp) p.coins.gp += data.gp;
-                } else if (type === 'item') {
-                    p.items.push({ id: 'i_' + Date.now(), name: data.name, weight: data.weight, qty: data.qty });
-                }
-            });
-            saveState();
-            showToast(`Granted quick loot to ${target === 'all' ? 'the party' : target}!`);
+        function initDMListener() {
+            db.collection("sessions").doc(currentRoom).collection("players")
+                .onSnapshot((snapshot) => {
+                    const listContainer = document.getElementById("dm-player-list");
+                    listContainer.innerHTML = "";
+                    if (snapshot.empty) {
+                        listContainer.innerHTML = '<div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-400 text-sm">Waiting for players to join...</div>';
+                        return;
+                    }
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        const item = document.createElement("div");
+                        item.className = "p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between items-center";
+                        item.innerHTML = `<span class="font-semibold text-slate-200">${data.name}</span> <span class="text-amber-400 font-mono">${data.gold || 0} Gold</span>`;
+                        listContainer.appendChild(item);
+                    });
+                });
         }
-
-        function handleDMCoinGrant(e) {
-            e.preventDefault();
-            const target = document.getElementById('dm-grant-coin-target').value;
-            const coinType = document.getElementById('dm-grant-coin-type').value;
-            const amount = parseInt(document.getElementById('dm-grant-coin-amount').value) || 0;
-
-            const targets = target === 'all' ? Object.keys(state.players) : [target];
-            targets.forEach(name => {
-                if (state.players[name]) {
-                    state.players[name].coins[coinType] += amount;
-                }
-            });
-
-            saveState();
-            showToast(`Awarded ${amount} ${coinType.toUpperCase()} to ${target}!`);
-        }
-
-        function handleDMItemGrant(e) {
-            e.preventDefault();
-            const target = document.getElementById('dm-grant-item-target').value;
-            const name = document.getElementById('dm-grant-item-name').value.trim();
-            const weight = parseFloat(document.getElementById('dm-grant-item-weight').value) || 1;
-            const qty = parseInt(document.getElementById('dm-grant-item-qty').value) || 1;
-
-            const targets = target === 'all' ? Object.keys(state.players) : [target];
-            targets.forEach(pName => {
-                if (state.players[pName]) {
-                    state.players[pName].items.push({ id: 'i_' + Date.now(), name, weight, qty });
-                }
-            });
-
-            saveState();
-            showToast(`Sent ${name} to ${target}!`);
-        }
-
-        // --- 7. UTILITIES ---
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').innerText = msg;
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.add('hidden'), 3000);
-        }
-
-        // Initialize Lucide Icons on load
-        window.addEventListener('DOMContentLoaded', () => {
-            lucide.createIcons();
-        });
     </script>
 </body>
 </html>
