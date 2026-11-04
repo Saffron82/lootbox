@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LootBox</title>
+    <title>LootBox TRPG - Pathfinder & D&D</title>
 
-    <!-- PWA Home Screen Icon (Self-Contained SVG) -->
+    <!-- PWA Home Screen Icon -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext y='70' x='15' font-size='70'%3E📦%3C/text%3E%3C/svg%3E">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230f172a'/%3E%3Ctext y='70' x='15' font-size='70'%3E📦%3C/text%3E%3C/svg%3E">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Firebase App & Firestore SDK (v10.7.1 Compat) -->
+    <!-- Firebase SDK v10.7.1 Compat -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -24,7 +24,7 @@
         projectId: "lootbox-7162c",
         storageBucket: "lootbox-7162c.firebasestorage.app",
         messagingSenderId: "128137949582",
-        appId: "1:128137949582:web:956634ae3b7341076774df",
+        appId: "1:128137949582:web:956634ae3b7341076774cf",
         measurementId: "G-H0434TZQ01"
       };
 
@@ -40,7 +40,7 @@
     <header class="bg-slate-900 border-b border-slate-800 p-4 shadow-lg sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
             <h1 class="text-xl font-bold text-amber-400 flex items-center gap-2">
-                <span>📦</span> LootBox
+                <span>📦</span> LootBox TRPG
             </h1>
             <div id="connection-status" class="text-xs px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
                 Connected
@@ -48,7 +48,7 @@
         </div>
     </header>
 
-    <!-- Main Application View -->
+    <!-- Main Container -->
     <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col gap-6">
         
         <!-- Role Selection Screen -->
@@ -56,7 +56,7 @@
             <h2 class="text-lg font-semibold text-slate-200">Join Tabletop Session</h2>
             <div class="flex flex-col gap-3">
                 <input type="text" id="session-code" placeholder="Session Room Name (e.g., Campaign1)" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
-                <input type="text" id="user-name" placeholder="Your Name / Character Name" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
+                <input type="text" id="user-name" placeholder="Your Character Name" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
             </div>
             <div class="grid grid-cols-2 gap-4 mt-2">
                 <button onclick="joinSession('dm')" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-3 px-4 rounded-lg transition-colors">
@@ -68,46 +68,144 @@
             </div>
         </section>
 
-        <!-- DM Dashboard View (Hidden by Default) -->
-        <section id="dm-dashboard" class="hidden flex-col gap-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-                <h2 class="text-xl font-bold text-amber-400 mb-4">Dungeon Master Control Panel</h2>
-                <p class="text-sm text-slate-400 mb-4">Active Session: <span id="active-dm-room" class="text-slate-200 font-mono"></span></p>
-                <h3 class="text-md font-semibold text-slate-300 mb-2">Connected Party Members:</h3>
-                <div id="dm-player-list" class="flex flex-col gap-2">
-                    <div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-400 text-sm">Waiting for players to join...</div>
+        <!-- DM Dashboard View -->
+        <section id="dm-dashboard" class="hidden flex-col gap-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-6">
+                <div>
+                    <h2 class="text-xl font-bold text-amber-400 mb-1">Dungeon Master Control Panel</h2>
+                    <p class="text-sm text-slate-400">Active Session: <span id="active-dm-room" class="text-slate-200 font-mono"></span></p>
+                </div>
+
+                <!-- Party Member Inspection Selector -->
+                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-md font-semibold text-slate-300">Party Member Sheets (Inspect Player)</h3>
+                    <div id="dm-player-buttons" class="flex flex-wrap gap-2">
+                        <span class="text-xs text-slate-500 italic">Waiting for players to join...</span>
+                    </div>
+                </div>
+
+                <!-- Inspected Player Details View -->
+                <div id="dm-inspected-view" class="bg-slate-950 p-4 rounded-lg border border-slate-800 hidden flex-col gap-4">
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <h3 class="text-lg font-bold text-indigo-400" id="dm-inspect-name">Character Name</h3>
+                        <div class="flex gap-4 text-sm font-mono">
+                            <span class="text-amber-400">GP: <span id="dm-inspect-gp">0</span></span>
+                            <span class="text-slate-300">SP: <span id="dm-inspect-sp">0</span></span>
+                            <span class="text-amber-700">CP: <span id="dm-inspect-cp">0</span></span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Equipment</span>
+                            <div id="dm-inspect-equipment" class="mt-1 flex flex-col gap-1 text-slate-300"></div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Weapons & Ammo</span>
+                            <div id="dm-inspect-weapons" class="mt-1 flex flex-col gap-1 text-slate-300"></div>
+                        </div>
+                        <div>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Backpack</span>
+                            <div id="dm-inspect-backpack" class="mt-1 flex flex-col gap-1 text-slate-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DM Store / Merchant Manager -->
+                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-md font-semibold text-slate-300">Manage Town Store / Merchant Items</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                        <input type="text" id="new-store-item" placeholder="Item Name" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                        <input type="number" id="new-store-cost" placeholder="Cost Amount" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                        <select id="new-store-currency" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                            <option value="GP">Gold (GP)</option>
+                            <option value="SP">Silver (SP)</option>
+                            <option value="CP">Copper (CP)</option>
+                        </select>
+                        <button onclick="addStoreItem()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded text-sm">Add Item</button>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Player Sheet View (Hidden by Default) -->
+        <!-- Player Sheet View -->
         <section id="player-dashboard" class="hidden flex-col gap-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl flex flex-col gap-6">
                 <div class="flex justify-between items-center">
                     <h2 class="text-xl font-bold text-indigo-400" id="player-display-name">Character Sheet</h2>
                     <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 font-mono" id="active-player-room"></span>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Gold Card -->
-                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider">Gold Pieces</span>
+                <!-- Currency Bar (GP, SP, CP) -->
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Gold (GP)</span>
                         <div class="flex items-center gap-2 mt-1">
-                            <span id="player-gold" class="text-2xl font-bold text-amber-400">0</span>
-                            <button onclick="updateGold(10)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2.5 py-1 rounded font-bold">+10</button>
-                            <button onclick="updateGold(-10)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2.5 py-1 rounded font-bold">-10</button>
+                            <span id="player-gp" class="text-xl font-bold text-amber-400">0</span>
+                            <button onclick="updateCurrency('gp', 1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+1</button>
+                            <button onclick="updateCurrency('gp', -1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-1</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Silver (SP)</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span id="player-sp" class="text-xl font-bold text-slate-300">0</span>
+                            <button onclick="updateCurrency('sp', 1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+1</button>
+                            <button onclick="updateCurrency('sp', -1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-1</button>
+                        </div>
+                    </div>
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Copper (CP)</span>
+                        <div class="flex items-center gap-2 mt-1">
+                            <span id="player-cp" class="text-xl font-bold text-amber-700">0</span>
+                            <button onclick="updateCurrency('cp', 5)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+5</button>
+                            <button onclick="updateCurrency('cp', -5)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-5</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categorized Inventory Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- Equipment Slot -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Equipment</span>
+                            <button onclick="addItem('equipment')" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-2 py-1 rounded text-white font-bold">+ Add</button>
+                        </div>
+                        <div id="list-equipment" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">No equipment.</span>
                         </div>
                     </div>
 
-                    <!-- Inventory Card -->
+                    <!-- Weapons & Ammo -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                         <div class="flex justify-between items-center">
-                            <span class="text-xs text-slate-400 uppercase tracking-wider">Inventory Items</span>
-                            <button onclick="addItem()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-2.5 py-1 rounded text-white font-bold">+ Add Item</button>
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Weapons & Ammo</span>
+                            <button onclick="addWeaponItem()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-2 py-1 rounded text-white font-bold">+ Add</button>
                         </div>
-                        <div id="player-inventory-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
-                            <span class="text-xs text-slate-500 italic">No items in inventory.</span>
+                        <div id="list-weapons" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">No weapons.</span>
                         </div>
+                    </div>
+
+                    <!-- Backpack -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Backpack</span>
+                            <button onclick="addItem('backpack')" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-2 py-1 rounded text-white font-bold">+ Add</button>
+                        </div>
+                        <div id="list-backpack" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">Backpack empty.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Town Store & Merchant Section -->
+                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
+                        <span>🛒</span> Town Store & Traveling Merchant
+                    </h3>
+                    <div id="store-items-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <span class="text-xs text-slate-500 italic">No items for sale right now.</span>
                     </div>
                 </div>
             </div>
@@ -115,12 +213,14 @@
 
     </main>
 
-    <!-- Application Controller Script -->
+    <!-- Script Logic -->
     <script>
         let currentRoom = "";
         let currentRole = "";
         let playerName = "";
         let playerDocRef = null;
+        let sessionRef = null;
+        let cachedPlayersData = {};
 
         function joinSession(role) {
             currentRoom = document.getElementById("session-code").value.trim();
@@ -133,6 +233,7 @@
             }
 
             document.getElementById("role-select-screen").classList.add("hidden");
+            sessionRef = db.collection("sessions").doc(currentRoom);
 
             if (role === 'dm') {
                 document.getElementById("dm-dashboard").classList.remove("hidden");
@@ -144,17 +245,22 @@
                 document.getElementById("active-player-room").innerText = currentRoom;
                 initPlayerSync();
             }
+            initStoreListener();
         }
 
         function initPlayerSync() {
-            playerDocRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
+            playerDocRef = sessionRef.collection("players").doc(playerName);
             
             playerDocRef.get().then((doc) => {
                 if (!doc.exists) {
                     playerDocRef.set({
                         name: playerName,
-                        gold: 50,
-                        inventory: ["Health Potion", "Torch", "Rations"],
+                        gp: 50,
+                        sp: 20,
+                        cp: 100,
+                        equipment: ["Leather Armor", "Shield"],
+                        weapons: [{name: "Longsword", ammo: 0}, {name: "Shortbow", ammo: 20}],
+                        backpack: ["Health Potion", "Rations (5 days)", "Torch"],
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
@@ -163,96 +269,254 @@
             playerDocRef.onSnapshot((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
-                    document.getElementById("player-gold").innerText = data.gold || 0;
-                    renderInventory(data.inventory || []);
+                    document.getElementById("player-gp").innerText = data.gp || 0;
+                    document.getElementById("player-sp").innerText = data.sp || 0;
+                    document.getElementById("player-cp").innerText = data.cp || 0;
+                    renderCategoryList("equipment", data.equipment || []);
+                    renderWeaponsList(data.weapons || []);
+                    renderCategoryList("backpack", data.backpack || []);
                 }
             });
         }
 
-        function updateGold(amount) {
+        function updateCurrency(type, amount) {
             if (!playerDocRef) return;
             playerDocRef.get().then((doc) => {
-                let currentGold = doc.exists ? (doc.data().gold || 0) : 0;
-                let newGold = Math.max(0, currentGold + amount);
-                playerDocRef.update({ 
-                    gold: newGold,
-                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                });
+                if (!doc.exists) return;
+                let data = doc.data();
+                let current = data[type] || 0;
+                let updated = Math.max(0, current + amount);
+                let updatePayload = {};
+                updatePayload[type] = updated;
+                playerDocRef.update(updatePayload);
             });
         }
 
-        function addItem() {
+        function addItem(category) {
             if (!playerDocRef) return;
-            let itemName = prompt("Enter item name:");
+            let itemName = prompt(`Enter item name for ${category}:`);
             if (!itemName) return;
 
             playerDocRef.get().then((doc) => {
                 if (doc.exists) {
-                    let inventory = doc.data().inventory || [];
-                    inventory.push(itemName);
-                    playerDocRef.update({ 
-                        inventory: inventory,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    let list = doc.data()[category] || [];
+                    list.push(itemName);
+                    let payload = {};
+                    payload[category] = list;
+                    playerDocRef.update(payload);
                 }
             });
         }
 
-        function renderInventory(items) {
-            const container = document.getElementById("player-inventory-list");
+        function addWeaponItem() {
+            if (!playerDocRef) return;
+            let weaponName = prompt("Enter weapon name:");
+            if (!weaponName) return;
+            let ammoCount = parseInt(prompt("Initial ammo count (or 0 if none):", "0")) || 0;
+
+            playerDocRef.get().then((doc) => {
+                if (doc.exists) {
+                    let weapons = doc.data().weapons || [];
+                    weapons.push({name: weaponName, ammo: ammoCount});
+                    playerDocRef.update({weapons: weapons});
+                }
+            });
+        }
+
+        function renderCategoryList(category, items) {
+            const container = document.getElementById(`list-${category}`);
             container.innerHTML = "";
             if (items.length === 0) {
-                container.innerHTML = '<span class="text-xs text-slate-500 italic">No items in inventory.</span>';
+                container.innerHTML = `<span class="text-xs text-slate-500 italic">No ${category}.</span>`;
                 return;
             }
             items.forEach((item, index) => {
                 const div = document.createElement("div");
                 div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex justify-between items-center text-slate-300";
-                div.innerHTML = `<span>${item}</span><button onclick="removeItem(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5">✕</button>`;
+                div.innerHTML = `<span>${item}</span><button onclick="removeItem('${category}', ${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5">✕</button>`;
                 container.appendChild(div);
             });
         }
 
-        function removeItem(index) {
+        function renderWeaponsList(weapons) {
+            const container = document.getElementById("list-weapons");
+            container.innerHTML = "";
+            if (weapons.length === 0) {
+                container.innerHTML = '<span class="text-xs text-slate-500 italic">No weapons.</span>';
+                return;
+            }
+            weapons.forEach((w, index) => {
+                const div = document.createElement("div");
+                div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex justify-between items-center text-slate-300";
+                div.innerHTML = `
+                    <div>
+                        <span class="font-semibold">${w.name}</span>
+                        ${w.ammo > 0 ? `<span class="ml-2 text-xs text-amber-400 font-mono">Ammo: ${w.ammo}</span>` : ''}
+                    </div>
+                    <div class="flex items-center gap-1">
+                        ${w.ammo > 0 ? `<button onclick="adjustAmmo(${index}, -1)" class="bg-slate-800 px-1.5 rounded text-xs">-</button><button onclick="adjustAmmo(${index}, 1)" class="bg-slate-800 px-1.5 rounded text-xs">+</button>` : ''}
+                        <button onclick="removeWeapon(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 ml-1">✕</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function removeItem(category, index) {
             if (!playerDocRef) return;
             playerDocRef.get().then((doc) => {
                 if (doc.exists) {
-                    let inventory = doc.data().inventory || [];
-                    inventory.splice(index, 1);
-                    playerDocRef.update({ 
-                        inventory: inventory,
-                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-                    });
+                    let list = doc.data()[category] || [];
+                    list.splice(index, 1);
+                    let payload = {};
+                    payload[category] = list;
+                    playerDocRef.update(payload);
                 }
             });
         }
 
-        function initDMListener() {
-            db.collection("sessions").doc(currentRoom).collection("players")
-                .onSnapshot((snapshot) => {
-                    const listContainer = document.getElementById("dm-player-list");
-                    listContainer.innerHTML = "";
-                    if (snapshot.empty) {
-                        listContainer.innerHTML = '<div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-400 text-sm">Waiting for players to join...</div>';
-                        return;
+        function removeWeapon(index) {
+            if (!playerDocRef) return;
+            playerDocRef.get().then((doc) => {
+                if (doc.exists) {
+                    let weapons = doc.data().weapons || [];
+                    weapons.splice(index, 1);
+                    playerDocRef.update({weapons: weapons});
+                }
+            });
+        }
+
+        function adjustAmmo(index, amount) {
+            if (!playerDocRef) return;
+            playerDocRef.get().then((doc) => {
+                if (doc.exists) {
+                    let weapons = doc.data().weapons || [];
+                    if (weapons[index]) {
+                        weapons[index].ammo = Math.max(0, weapons[index].ammo + amount);
+                        playerDocRef.update({weapons: weapons});
                     }
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const item = document.createElement("div");
-                        item.className = "p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between items-center";
-                        
-                        let inventoryText = (data.inventory && data.inventory.length > 0) ? data.inventory.join(", ") : "Empty inventory";
-                        
-                        item.innerHTML = `
-                            <div>
-                                <div class="font-semibold text-slate-200">${data.name}</div>
-                                <div class="text-xs text-slate-400">Items: ${inventoryText}</div>
-                            </div>
-                            <div class="text-amber-400 font-mono font-bold">${data.gold || 0} Gold</div>
-                        `;
-                        listContainer.appendChild(item);
-                    });
+                }
+            });
+        }
+
+        function addStoreItem() {
+            const name = document.getElementById("new-store-item").value.trim();
+            const cost = parseInt(document.getElementById("new-store-cost").value) || 0;
+            const currency = document.getElementById("new-store-currency").value;
+            if (!name) return;
+
+            sessionRef.collection("store").add({
+                name: name,
+                cost: cost,
+                currency: currency,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                document.getElementById("new-store-item").value = "";
+                document.getElementById("new-store-cost").value = "";
+            });
+        }
+
+        function initStoreListener() {
+            sessionRef.collection("store").onSnapshot((snapshot) => {
+                const storeContainer = document.getElementById("store-items-list");
+                if (!storeContainer) return;
+                storeContainer.innerHTML = "";
+                if (snapshot.empty) {
+                    storeContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No store items available yet.</span>';
+                    return;
+                }
+                snapshot.forEach((doc) => {
+                    const item = doc.data();
+                    const itemId = doc.id;
+                    const currencyColor = item.currency === 'GP' ? 'text-amber-400' : (item.currency === 'SP' ? 'text-slate-300' : 'text-amber-700');
+                    const div = document.createElement("div");
+                    div.className = "p-3 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
+                    div.innerHTML = `
+                        <div>
+                            <div class="font-semibold text-slate-200">${item.name}</div>
+                            <div class="${currencyColor} font-mono text-xs">${item.cost} ${item.currency}</div>
+                        </div>
+                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
+                    `;
+                    storeContainer.appendChild(div);
                 });
+            });
+        }
+
+        function buyStoreItem(itemName, cost, currency) {
+            if (!playerDocRef) return;
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let currentFunds = data[currency.toLowerCase()] || 0;
+                if (currentFunds < cost) {
+                    alert(`Not enough ${currency}! You need ${cost} but only have ${currentFunds}.`);
+                    return;
+                }
+                let backpack = data.backpack || [];
+                backpack.push(itemName);
+                
+                let updatePayload = {
+                    backpack: backpack,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                updatePayload[currency.toLowerCase()] = currentFunds - cost;
+
+                playerDocRef.update(updatePayload);
+                alert(`Successfully purchased ${itemName}!`);
+            });
+        }
+
+        function deleteStoreItem(itemId) {
+            sessionRef.collection("store").doc(itemId).delete();
+        }
+
+        function initDMListener() {
+            sessionRef.collection("players").onSnapshot((snapshot) => {
+                const buttonsContainer = document.getElementById("dm-player-buttons");
+                buttonsContainer.innerHTML = "";
+                cachedPlayersData = {};
+
+                if (snapshot.empty) {
+                    buttonsContainer.innerHTML = '<span class="text-xs text-slate-500 italic">Waiting for players to join...</span>';
+                    document.getElementById("dm-inspected-view").classList.add("hidden");
+                    return;
+                }
+
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    cachedPlayersData[doc.id] = data;
+
+                    const btn = document.createElement("button");
+                    btn.className = "bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold px-3 py-2 rounded-lg text-sm transition-colors";
+                    btn.innerText = `👤 ${data.name}`;
+                    btn.onclick = () => inspectPlayer(doc.id);
+                    buttonsContainer.appendChild(btn);
+                });
+            });
+        }
+
+        function inspectPlayer(playerId) {
+            const data = cachedPlayersData[playerId];
+            if (!data) return;
+
+            document.getElementById("dm-inspected-view").classList.remove("hidden");
+            document.getElementById("dm-inspect-name").innerText = data.name;
+            document.getElementById("dm-inspect-gp").innerText = data.gp || 0;
+            document.getElementById("dm-inspect-sp").innerText = data.sp || 0;
+            document.getElementById("dm-inspect-cp").innerText = data.cp || 0;
+
+            // Render Equipment
+            const eqContainer = document.getElementById("dm-inspect-equipment");
+            eqContainer.innerHTML = (data.equipment && data.equipment.length > 0) ? data.equipment.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
+
+            // Render Weapons
+            const wpContainer = document.getElementById("dm-inspect-weapons");
+            wpContainer.innerHTML = (data.weapons && data.weapons.length > 0) ? data.weapons.map(w => `<div>• ${w.name} ${w.ammo > 0 ? `(Ammo: ${w.ammo})` : ''}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
+
+            // Render Backpack
+            const bpContainer = document.getElementById("dm-inspect-backpack");
+            bpContainer.innerHTML = (data.backpack && data.backpack.length > 0) ? data.backpack.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">Empty</span>';
         }
     </script>
 </body>
