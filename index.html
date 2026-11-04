@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LootBox</title>
 
-    <!-- Custom App Icon & Favicon (Gold Chest + "LB" Branding) -->
+    <!-- Custom App Icon & Favicon -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230f172a'/%3E%3Cpath d='M80 200 L256 120 L432 200 L432 380 Q432 410 402 410 L110 410 Q80 410 80 380 Z' fill='%23475569' stroke='%23f59e0b' stroke-width='16'/%3E%3Cpath d='M80 200 L256 260 L432 200' fill='none' stroke='%23fbbf24' stroke-width='14'/%3E%3Crect x='96' y='210' width='320' height='180' rx='12' fill='%2378350f' stroke='%23f59e0b' stroke-width='10'/%3E%3Cpath d='M80 200 L256 120 L432 200 L256 260 Z' fill='%23b45309' stroke='%23fbbf24' stroke-width='10'/%3E%3Ccircle cx='256' cy='295' r='36' fill='%23f59e0b' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='256' y='305' font-family='monospace, sans-serif' font-weight='900' font-size='32' fill='%2378350f' text-anchor='middle'%3ELB%3C/text%3E%3Ccircle cx='130' cy='140' r='8' fill='%2338bdf8'/%3E%3Ccircle cx='380' cy='150' r='10' fill='%2338bdf8'/%3E%3Ccircle cx='390' cy='330' r='6' fill='%2338bdf8'/%3E%3C/svg%3E">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230f172a'/%3E%3Cpath d='M80 200 L256 120 L432 200 L432 380 Q432 410 402 410 L110 410 Q80 410 80 380 Z' fill='%23475569' stroke='%23f59e0b' stroke-width='16'/%3E%3Cpath d='M80 200 L256 260 L432 200' fill='none' stroke='%23fbbf24' stroke-width='14'/%3E%3Crect x='96' y='210' width='320' height='180' rx='12' fill='%2378350f' stroke='%23f59e0b' stroke-width='10'/%3E%3Cpath d='M80 200 L256 120 L432 200 L256 260 Z' fill='%23b45309' stroke='%23fbbf24' stroke-width='10'/%3E%3Ccircle cx='256' cy='295' r='36' fill='%23f59e0b' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='256' y='305' font-family='monospace, sans-serif' font-weight='900' font-size='32' fill='%2378350f' text-anchor='middle'%3ELB%3C/text%3E%3Ccircle cx='130' cy='140' r='8' fill='%2338bdf8'/%3E%3Ccircle cx='380' cy='150' r='10' fill='%2338bdf8'/%3E%3Ccircle cx='390' cy='330' r='6' fill='%2338bdf8'/%3E%3C/svg%3E">
 
@@ -72,7 +72,7 @@
                     <label class="text-xs text-slate-400 uppercase tracking-wider font-bold">Select Character Class (Players Only)</label>
                     <select id="user-class" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
                         <option value="Fighter">Fighter (Heavy Armor, Sword, Shield, Explorer's Pack)</option>
-                        <option value="Rogue">Rogue (Leather Armor, Daggers, Burglar's Pack)</option>
+                        <option value="Rogue">Rogue (Leather Armor, Shortsword, Burglar's Pack)</option>
                         <option value="Wizard">Wizard (Robes, Quarterstaff, Scholar's Pack)</option>
                         <option value="Cleric">Cleric (Scale Mail, Mace, Priest's Pack)</option>
                         <option value="Barbarian">Barbarian (Greataxe, Explorer's Pack)</option>
@@ -100,7 +100,7 @@
 
                 <!-- Party Member Inspection Selector -->
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
-                    <h3 class="text-md font-semibold text-slate-300">Party Member Sheets (Inspect Player)</h3>
+                    <h3 class="text-md font-semibold text-slate-300">Party Member Sheets (Inspect & Manage Player)</h3>
                     <div id="dm-player-buttons" class="flex flex-wrap gap-2">
                         <span class="text-xs text-slate-500 italic">Waiting for players to join...</span>
                     </div>
@@ -156,15 +156,18 @@
                             </div>
                         </div>
 
-                        <!-- General Store -->
+                        <!-- General Store (Including Adventure Packs) -->
                         <div class="flex flex-col gap-1 mt-1">
-                            <span class="text-[11px] text-indigo-400 font-bold uppercase">📦 General Store</span>
+                            <span class="text-[11px] text-indigo-400 font-bold uppercase">📦 General Store & Adventure Packs</span>
                             <div class="flex flex-wrap gap-1.5">
                                 <button onclick="quickAddStoreItem('Torch (5)', 5, 'CP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Torches (5 CP)</button>
                                 <button onclick="quickAddStoreItem('Rations (5 days)', 2, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rations (2 GP)</button>
                                 <button onclick="quickAddStoreItem('Hempen Rope 50ft', 1, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rope (1 GP)</button>
-                                <button onclick="quickAddStoreItem('Explorer\'s Pack', 10, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Explorer's Pack</button>
-                                <button onclick="quickAddStoreItem('Burglar\'s Pack', 16, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Burglar's Pack</button>
+                                <button onclick="quickAddStoreItem(&quot;Explorer's Pack&quot;, 10, 'GP', 'backpack', 'general')" class="bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-xs px-2 py-1 rounded text-indigo-200">+ Explorer's Pack (10 GP)</button>
+                                <button onclick="quickAddStoreItem(&quot;Burglar's Pack&quot;, 16, 'GP', 'backpack', 'general')" class="bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-xs px-2 py-1 rounded text-indigo-200">+ Burglar's Pack (16 GP)</button>
+                                <button onclick="quickAddStoreItem(&quot;Scholar's Pack&quot;, 12, 'GP', 'backpack', 'general')" class="bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-xs px-2 py-1 rounded text-indigo-200">+ Scholar's Pack (12 GP)</button>
+                                <button onclick="quickAddStoreItem(&quot;Priest's Pack&quot;, 19, 'GP', 'backpack', 'general')" class="bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-xs px-2 py-1 rounded text-indigo-200">+ Priest's Pack (19 GP)</button>
+                                <button onclick="quickAddStoreItem(&quot;Dungeoneer's Pack&quot;, 12, 'GP', 'backpack', 'general')" class="bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-xs px-2 py-1 rounded text-indigo-200">+ Dungeoneer's Pack (12 GP)</button>
                                 <button onclick="clearSingleStore('general')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear General</button>
                             </div>
                         </div>
@@ -349,6 +352,7 @@
         let playerDocRef = null;
         let sessionRef = null;
         let cachedPlayersData = {};
+        let activeInspectedPlayerId = null;
 
         const packContents = {
             "Explorer's Pack": ["Bedroll", "Rations (10 days)", "Tinderbox", "Torch (10)", "Hempen Rope (50ft)"],
@@ -368,7 +372,7 @@
             "Rogue": {
                 gp: 25, sp: 20, cp: 100,
                 equipment: ["Leather Armor", "Thieves' Tools"],
-                weapons: [{name: "Rapier", ammo: 0}, {name: "Shortbow", ammo: 20}],
+                weapons: [{name: "Shortsword", ammo: 0}, {name: "Shortbow", ammo: 20}],
                 backpack: ["Burglar's Pack", "Health Potion"]
             },
             "Wizard": {
@@ -429,7 +433,6 @@
             
             playerDocRef.get().then((doc) => {
                 if (!doc.exists) {
-                    // Character ONLY gets class preset items on initial creation
                     const preset = classPresets[playerClass] || classPresets["Fighter"];
                     playerDocRef.set({
                         name: playerName,
@@ -443,7 +446,6 @@
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
                 }
-                // If character ALREADY exists, do NOTHING to their items or class!
             });
 
             playerDocRef.onSnapshot((doc) => {
@@ -596,6 +598,60 @@
                     let payload = {};
                     payload[category] = list;
                     playerDocRef.update(payload);
+                }
+            });
+        }
+
+        // DM Control: Remove item from a targeted player's inventory category
+        function dmRemovePlayerItem(targetPlayerId, category, index) {
+            if (!sessionRef) return;
+            const targetRef = sessionRef.collection("players").doc(targetPlayerId);
+            
+            targetRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let list = data[category] || [];
+                list.splice(index, 1);
+                
+                let payload = {};
+                payload[category] = list;
+                targetRef.update(payload).then(() => {
+                    inspectPlayer(targetPlayerId);
+                });
+            });
+        }
+
+        // DM Control: Remove weapon from a targeted player
+        function dmRemovePlayerWeapon(targetPlayerId, index) {
+            if (!sessionRef) return;
+            const targetRef = sessionRef.collection("players").doc(targetPlayerId);
+            
+            targetRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let weapons = data.weapons || [];
+                weapons.splice(index, 1);
+                
+                targetRef.update({ weapons: weapons }).then(() => {
+                    inspectPlayer(targetPlayerId);
+                });
+            });
+        }
+
+        // DM Control: Adjust ammo for a player's weapon directly
+        function dmAdjustPlayerAmmo(targetPlayerId, index, amount) {
+            if (!sessionRef) return;
+            const targetRef = sessionRef.collection("players").doc(targetPlayerId);
+            
+            targetRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let weapons = data.weapons || [];
+                if (weapons[index]) {
+                    weapons[index].ammo = Math.max(0, (weapons[index].ammo || 0) + amount);
+                    targetRef.update({ weapons: weapons }).then(() => {
+                        inspectPlayer(targetPlayerId);
+                    });
                 }
             });
         }
@@ -760,12 +816,15 @@
                     
                     const div = document.createElement("div");
                     div.className = "p-2 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
+                    
+                    const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                    
                     div.innerHTML = `
                         <div>
                             <div class="font-semibold text-slate-200">${item.name} <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 uppercase">${item.type || 'backpack'}</span></div>
                             <div class="${currencyColor} font-mono text-xs">${item.cost} ${item.currency}</div>
                         </div>
-                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
+                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${safeName}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
                     `;
 
                     if (stores[loc]) {
@@ -786,16 +845,18 @@
             playerDocRef.get().then((doc) => {
                 if (!doc.exists) return;
                 let data = doc.data();
-                let currentFunds = data[currency.toLowerCase()] || 0;
+                let currencyKey = currency.toLowerCase();
+                let currentFunds = data[currencyKey] || 0;
+                
                 if (currentFunds < cost) {
-                    alert(`Not enough ${currency}! You need ${cost} but only have ${currentFunds}.`);
+                    alert(`Not enough ${currency}! You need ${cost} ${currency} but only have ${currentFunds} ${currency}.`);
                     return;
                 }
 
                 let updatePayload = {
                     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                 };
-                updatePayload[currency.toLowerCase()] = currentFunds - cost;
+                updatePayload[currencyKey] = currentFunds - cost;
 
                 if (itemType === 'equipment') {
                     let equipment = data.equipment || [];
@@ -837,15 +898,20 @@
                     cachedPlayersData[doc.id] = data;
 
                     const btn = document.createElement("button");
-                    btn.className = "bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold px-3 py-2 rounded-lg text-sm transition-colors";
+                    btn.className = "bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-1.5";
                     btn.innerText = `👤 ${data.name} (${data.charClass || 'Adventurer'})`;
                     btn.onclick = () => inspectPlayer(doc.id);
                     buttonsContainer.appendChild(btn);
                 });
+
+                if (activeInspectedPlayerId && cachedPlayersData[activeInspectedPlayerId]) {
+                    inspectPlayer(activeInspectedPlayerId);
+                }
             });
         }
 
         function inspectPlayer(playerId) {
+            activeInspectedPlayerId = playerId;
             const data = cachedPlayersData[playerId];
             if (!data) return;
 
@@ -857,13 +923,39 @@
             document.getElementById("dm-inspect-cp").innerText = data.cp || 0;
 
             const eqContainer = document.getElementById("dm-inspect-equipment");
-            eqContainer.innerHTML = (data.equipment && data.equipment.length > 0) ? data.equipment.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
+            eqContainer.innerHTML = (data.equipment && data.equipment.length > 0) ? 
+                data.equipment.map((item, idx) => `
+                    <div class="flex items-center justify-between bg-slate-900 p-1.5 rounded border border-slate-800">
+                        <span>• ${item}</span>
+                        <button onclick="dmRemovePlayerItem('${playerId}', 'equipment', ${idx})" class="bg-red-950 hover:bg-red-900 text-red-300 text-[10px] px-1.5 py-0.5 rounded border border-red-800">Remove</button>
+                    </div>
+                `).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
 
             const wpContainer = document.getElementById("dm-inspect-weapons");
-            wpContainer.innerHTML = (data.weapons && data.weapons.length > 0) ? data.weapons.map(w => `<div>• ${w.name} ${w.ammo > 0 ? `(Ammo: ${w.ammo})` : ''}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
+            wpContainer.innerHTML = (data.weapons && data.weapons.length > 0) ? 
+                data.weapons.map((w, idx) => `
+                    <div class="flex flex-col gap-1 bg-slate-900 p-1.5 rounded border border-slate-800">
+                        <div class="flex items-center justify-between">
+                            <span>• ${w.name} ${w.ammo > 0 ? `<span class="text-amber-400 text-xs font-mono">(Ammo: ${w.ammo})</span>` : ''}</span>
+                            <button onclick="dmRemovePlayerWeapon('${playerId}', ${idx})" class="bg-red-950 hover:bg-red-900 text-red-300 text-[10px] px-1.5 py-0.5 rounded border border-red-800">Remove</button>
+                        </div>
+                        ${w.ammo > 0 ? `
+                            <div class="flex gap-1 justify-end">
+                                <button onclick="dmAdjustPlayerAmmo('${playerId}', ${idx}, -1)" class="bg-slate-800 text-xs px-1.5 py-0.5 rounded font-bold">- Ammo</button>
+                                <button onclick="dmAdjustPlayerAmmo('${playerId}', ${idx}, 1)" class="bg-slate-800 text-xs px-1.5 py-0.5 rounded font-bold">+ Ammo</button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
 
             const bpContainer = document.getElementById("dm-inspect-backpack");
-            bpContainer.innerHTML = (data.backpack && data.backpack.length > 0) ? data.backpack.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">Empty</span>';
+            bpContainer.innerHTML = (data.backpack && data.backpack.length > 0) ? 
+                data.backpack.map((item, idx) => `
+                    <div class="flex items-center justify-between bg-slate-900 p-1.5 rounded border border-slate-800">
+                        <span>• ${item}</span>
+                        <button onclick="dmRemovePlayerItem('${playerId}', 'backpack', ${idx})" class="bg-red-950 hover:bg-red-900 text-red-300 text-[10px] px-1.5 py-0.5 rounded border border-red-800">Remove</button>
+                    </div>
+                `).join('') : '<span class="text-slate-500 italic text-xs">Empty</span>';
         }
     </script>
 </body>
