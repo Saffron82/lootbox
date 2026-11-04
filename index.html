@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LootBox TRPG - Pathfinder & D&D</title>
+    <title>LootBox</title>
 
-    <!-- Custom App Icon (Gold Chest + "LB" Branding) -->
+    <!-- Custom App Icon & Favicon (Gold Chest + "LB" Branding) -->
     <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230f172a'/%3E%3Cpath d='M80 200 L256 120 L432 200 L432 380 Q432 410 402 410 L110 410 Q80 410 80 380 Z' fill='%23475569' stroke='%23f59e0b' stroke-width='16'/%3E%3Cpath d='M80 200 L256 260 L432 200' fill='none' stroke='%23fbbf24' stroke-width='14'/%3E%3Crect x='96' y='210' width='320' height='180' rx='12' fill='%2378350f' stroke='%23f59e0b' stroke-width='10'/%3E%3Cpath d='M80 200 L256 120 L432 200 L256 260 Z' fill='%23b45309' stroke='%23fbbf24' stroke-width='10'/%3E%3Ccircle cx='256' cy='295' r='36' fill='%23f59e0b' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='256' y='305' font-family='monospace, sans-serif' font-weight='900' font-size='32' fill='%2378350f' text-anchor='middle'%3ELB%3C/text%3E%3Ccircle cx='130' cy='140' r='8' fill='%2338bdf8'/%3E%3Ccircle cx='380' cy='150' r='10' fill='%2338bdf8'/%3E%3Ccircle cx='390' cy='330' r='6' fill='%2338bdf8'/%3E%3C/svg%3E">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='110' fill='%230f172a'/%3E%3Cpath d='M80 200 L256 120 L432 200 L432 380 Q432 410 402 410 L110 410 Q80 410 80 380 Z' fill='%23475569' stroke='%23f59e0b' stroke-width='16'/%3E%3Cpath d='M80 200 L256 260 L432 200' fill='none' stroke='%23fbbf24' stroke-width='14'/%3E%3Crect x='96' y='210' width='320' height='180' rx='12' fill='%2378350f' stroke='%23f59e0b' stroke-width='10'/%3E%3Cpath d='M80 200 L256 120 L432 200 L256 260 Z' fill='%23b45309' stroke='%23fbbf24' stroke-width='10'/%3E%3Ccircle cx='256' cy='295' r='36' fill='%23f59e0b' stroke='%2378350f' stroke-width='6'/%3E%3Ctext x='256' y='305' font-family='monospace, sans-serif' font-weight='900' font-size='32' fill='%2378350f' text-anchor='middle'%3ELB%3C/text%3E%3Ccircle cx='130' cy='140' r='8' fill='%2338bdf8'/%3E%3Ccircle cx='380' cy='150' r='10' fill='%2338bdf8'/%3E%3Ccircle cx='390' cy='330' r='6' fill='%2338bdf8'/%3E%3C/svg%3E">
 
@@ -24,7 +24,7 @@
         projectId: "lootbox-7162c",
         storageBucket: "lootbox-7162c.firebasestorage.app",
         messagingSenderId: "128137949582",
-        appId: "1:128137949582:web:956634ae3b7341076774df",
+        appId: "1:128137949582:web:956634ae3b7341076774cf",
         measurementId: "G-H0434TZQ01"
       };
 
@@ -39,8 +39,18 @@
     <!-- App Header -->
     <header class="bg-slate-900 border-b border-slate-800 p-4 shadow-lg sticky top-0 z-50">
         <div class="max-w-4xl mx-auto flex items-center justify-between">
-            <h1 class="text-xl font-bold text-amber-400 flex items-center gap-2">
-                <span>📦</span> LootBox TRPG
+            <h1 class="text-xl font-bold text-amber-400 flex items-center gap-2.5">
+                <!-- Custom SVG Logo Graphic -->
+                <svg class="w-7 h-7" viewBox="0 0 512 512">
+                    <rect width="512" height="512" rx="110" fill="#0f172a"/>
+                    <path d="M80 200 L256 120 L432 200 L432 380 Q432 410 402 410 L110 410 Q80 410 80 380 Z" fill="#475569" stroke="#f59e0b" stroke-width="16"/>
+                    <path d="M80 200 L256 260 L432 200" fill="none" stroke="#fbbf24" stroke-width="14"/>
+                    <rect x="96" y="210" width="320" height="180" rx="12" fill="#78350f" stroke="#f59e0b" stroke-width="10"/>
+                    <path d="M80 200 L256 120 L432 200 L256 260 Z" fill="#b45309" stroke="#fbbf24" stroke-width="10"/>
+                    <circle cx="256" cy="295" r="36" fill="#f59e0b" stroke="#78350f" stroke-width="6"/>
+                    <text x="256" y="305" font-family="monospace, sans-serif" font-weight="900" font-size="32" fill="#78350f" text-anchor="middle">LB</text>
+                </svg>
+                <span>LootBox</span>
             </h1>
             <div id="connection-status" class="text-xs px-2.5 py-1 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-800">
                 Connected
@@ -113,13 +123,18 @@
                 <!-- DM Store / Merchant Manager -->
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                     <h3 class="text-md font-semibold text-slate-300">Manage Town Store / Merchant Items</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
                         <input type="text" id="new-store-item" placeholder="Item Name" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                        <input type="number" id="new-store-cost" placeholder="Cost Amount" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                        <input type="number" id="new-store-cost" placeholder="Cost" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                         <select id="new-store-currency" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                             <option value="GP">Gold (GP)</option>
                             <option value="SP">Silver (SP)</option>
                             <option value="CP">Copper (CP)</option>
+                        </select>
+                        <select id="new-store-type" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                            <option value="equipment">Equipment</option>
+                            <option value="weapon">Weapon</option>
+                            <option value="backpack">Backpack</option>
                         </select>
                         <button onclick="addStoreItem()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded text-sm">Add Item</button>
                     </div>
@@ -135,37 +150,36 @@
                     <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 font-mono" id="active-player-room"></span>
                 </div>
                 
-                <!-- Currency Bar (GP, SP, CP) -->
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider">Gold (GP)</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span id="player-gp" class="text-xl font-bold text-amber-400">0</span>
-                            <button onclick="updateCurrency('gp', 1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+1</button>
-                            <button onclick="updateCurrency('gp', -1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-1</button>
+                <!-- Currency Bar (GP, SP, CP) - Mobile Stacked -->
+                <div class="grid grid-cols-3 gap-2 md:gap-3">
+                    <div class="bg-slate-950 p-2.5 md:p-3 rounded-lg border border-slate-800 flex flex-col items-center text-center">
+                        <span class="text-[10px] md:text-xs text-slate-400 uppercase tracking-wider font-semibold">Gold (GP)</span>
+                        <span id="player-gp" class="text-lg md:text-2xl font-bold text-amber-400 my-1">0</span>
+                        <div class="flex items-center justify-center gap-1 w-full mt-auto">
+                            <button onclick="updateCurrency('gp', -1)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded font-bold flex-1">-1</button>
+                            <button onclick="updateCurrency('gp', 1)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded font-bold flex-1">+1</button>
                         </div>
                     </div>
-                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider">Silver (SP)</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span id="player-sp" class="text-xl font-bold text-slate-300">0</span>
-                            <button onclick="updateCurrency('sp', 1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+1</button>
-                            <button onclick="updateCurrency('sp', -1)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-1</button>
+                    <div class="bg-slate-950 p-2.5 md:p-3 rounded-lg border border-slate-800 flex flex-col items-center text-center">
+                        <span class="text-[10px] md:text-xs text-slate-400 uppercase tracking-wider font-semibold">Silver (SP)</span>
+                        <span id="player-sp" class="text-lg md:text-2xl font-bold text-slate-300 my-1">0</span>
+                        <div class="flex items-center justify-center gap-1 w-full mt-auto">
+                            <button onclick="updateCurrency('sp', -1)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded font-bold flex-1">-1</button>
+                            <button onclick="updateCurrency('sp', 1)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded font-bold flex-1">+1</button>
                         </div>
                     </div>
-                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider">Copper (CP)</span>
-                        <div class="flex items-center gap-2 mt-1">
-                            <span id="player-cp" class="text-xl font-bold text-amber-700">0</span>
-                            <button onclick="updateCurrency('cp', 5)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">+5</button>
-                            <button onclick="updateCurrency('cp', -5)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2 py-0.5 rounded font-bold">-5</button>
+                    <div class="bg-slate-950 p-2.5 md:p-3 rounded-lg border border-slate-800 flex flex-col items-center text-center">
+                        <span class="text-[10px] md:text-xs text-slate-400 uppercase tracking-wider font-semibold">Copper (CP)</span>
+                        <span id="player-cp" class="text-lg md:text-2xl font-bold text-amber-700 my-1">0</span>
+                        <div class="flex items-center justify-center gap-1 w-full mt-auto">
+                            <button onclick="updateCurrency('cp', -5)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-1.5 py-0.5 rounded font-bold flex-1">-5</button>
+                            <button onclick="updateCurrency('cp', 5)" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs px-1.5 py-0.5 rounded font-bold flex-1">+5</button>
                         </div>
                     </div>
                 </div>
 
                 <!-- Categorized Inventory Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <!-- Equipment Slot -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Equipment</span>
@@ -176,7 +190,6 @@
                         </div>
                     </div>
 
-                    <!-- Weapons & Ammo -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Weapons & Ammo</span>
@@ -187,7 +200,6 @@
                         </div>
                     </div>
 
-                    <!-- Backpack -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Backpack</span>
@@ -323,6 +335,75 @@
             });
         }
 
+        function moveItem(fromCat, toCat, index) {
+            if (!playerDocRef) return;
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let sourceList = data[fromCat] || [];
+                let item = sourceList[index];
+                if (!item) return;
+
+                sourceList.splice(index, 1);
+                let targetList = data[toCat] || [];
+                targetList.push(item);
+
+                let payload = {};
+                payload[fromCat] = sourceList;
+                payload[toCat] = targetList;
+                playerDocRef.update(payload);
+            });
+        }
+
+        function sellItem(category, index, isWeapon = false) {
+            if (!playerDocRef) return;
+            let salePrice = parseInt(prompt("Enter sell price in Gold Pieces (GP) to receive:", "5")) || 0;
+            if (salePrice < 0) return;
+
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+
+                if (isWeapon) {
+                    let weapons = data.weapons || [];
+                    weapons.splice(index, 1);
+                    playerDocRef.update({
+                        weapons: weapons,
+                        gp: (data.gp || 0) + salePrice
+                    });
+                } else {
+                    let list = data[category] || [];
+                    list.splice(index, 1);
+                    let payload = { gp: (data.gp || 0) + salePrice };
+                    payload[category] = list;
+                    playerDocRef.update(payload);
+                }
+                alert(`Item sold for ${salePrice} GP!`);
+            });
+        }
+
+        function discardItem(category, index, isWeapon = false) {
+            if (!playerDocRef) return;
+            if (!confirm("Are you sure you want to discard this item?")) return;
+
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+
+                if (isWeapon) {
+                    let weapons = data.weapons || [];
+                    weapons.splice(index, 1);
+                    playerDocRef.update({ weapons: weapons });
+                } else {
+                    let list = data[category] || [];
+                    list.splice(index, 1);
+                    let payload = {};
+                    payload[category] = list;
+                    playerDocRef.update(payload);
+                }
+            });
+        }
+
         function renderCategoryList(category, items) {
             const container = document.getElementById(`list-${category}`);
             container.innerHTML = "";
@@ -332,8 +413,31 @@
             }
             items.forEach((item, index) => {
                 const div = document.createElement("div");
-                div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex justify-between items-center text-slate-300";
-                div.innerHTML = `<span>${item}</span><button onclick="removeItem('${category}', ${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5">✕</button>`;
+                div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex flex-col gap-1 text-slate-300";
+                
+                let actionButtons = '';
+                if (category === 'backpack') {
+                    actionButtons = `
+                        <div class="flex gap-1 mt-1">
+                            <button onclick="moveItem('backpack', 'equipment', ${index})" class="bg-indigo-900 hover:bg-indigo-800 text-indigo-200 text-xs px-2 py-0.5 rounded">Equip</button>
+                            <button onclick="sellItem('backpack', ${index})" class="bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs px-2 py-0.5 rounded">Sell</button>
+                            <button onclick="discardItem('backpack', ${index})" class="bg-red-950 hover:bg-red-900 text-red-300 text-xs px-2 py-0.5 rounded">Drop</button>
+                        </div>
+                    `;
+                } else {
+                    actionButtons = `
+                        <div class="flex gap-1 mt-1">
+                            <button onclick="moveItem('equipment', 'backpack', ${index})" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-2 py-0.5 rounded">To Backpack</button>
+                            <button onclick="sellItem('equipment', ${index})" class="bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs px-2 py-0.5 rounded">Sell</button>
+                            <button onclick="discardItem('equipment', ${index})" class="bg-red-950 hover:bg-red-900 text-red-300 text-xs px-2 py-0.5 rounded">Drop</button>
+                        </div>
+                    `;
+                }
+
+                div.innerHTML = `
+                    <div class="font-semibold text-slate-100">${item}</div>
+                    ${actionButtons}
+                `;
                 container.appendChild(div);
             });
         }
@@ -347,42 +451,23 @@
             }
             weapons.forEach((w, index) => {
                 const div = document.createElement("div");
-                div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex justify-between items-center text-slate-300";
+                div.className = "p-2 bg-slate-900 rounded border border-slate-800 text-sm flex flex-col gap-1 text-slate-300";
                 div.innerHTML = `
-                    <div>
-                        <span class="font-semibold">${w.name}</span>
-                        ${w.ammo > 0 ? `<span class="ml-2 text-xs text-amber-400 font-mono">Ammo: ${w.ammo}</span>` : ''}
+                    <div class="flex justify-between items-center">
+                        <span class="font-semibold text-slate-100">${w.name}</span>
+                        ${w.ammo > 0 ? `<span class="text-xs text-amber-400 font-mono">Ammo: ${w.ammo}</span>` : ''}
                     </div>
-                    <div class="flex items-center gap-1">
-                        ${w.ammo > 0 ? `<button onclick="adjustAmmo(${index}, -1)" class="bg-slate-800 px-1.5 rounded text-xs">-</button><button onclick="adjustAmmo(${index}, 1)" class="bg-slate-800 px-1.5 rounded text-xs">+</button>` : ''}
-                        <button onclick="removeWeapon(${index})" class="text-red-400 hover:text-red-300 text-xs px-1.5 py-0.5 ml-1">✕</button>
+                    <div class="flex items-center justify-between mt-1">
+                        <div class="flex gap-1">
+                            ${w.ammo > 0 ? `<button onclick="adjustAmmo(${index}, -1)" class="bg-slate-800 px-2 py-0.5 rounded text-xs font-bold">- Ammo</button><button onclick="adjustAmmo(${index}, 1)" class="bg-slate-800 px-2 py-0.5 rounded text-xs font-bold">+ Ammo</button>` : ''}
+                        </div>
+                        <div class="flex gap-1">
+                            <button onclick="sellItem('weapons', ${index}, true)" class="bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs px-2 py-0.5 rounded">Sell</button>
+                            <button onclick="discardItem('weapons', ${index}, true)" class="bg-red-950 hover:bg-red-900 text-red-300 text-xs px-2 py-0.5 rounded">Drop</button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(div);
-            });
-        }
-
-        function removeItem(category, index) {
-            if (!playerDocRef) return;
-            playerDocRef.get().then((doc) => {
-                if (doc.exists) {
-                    let list = doc.data()[category] || [];
-                    list.splice(index, 1);
-                    let payload = {};
-                    payload[category] = list;
-                    playerDocRef.update(payload);
-                }
-            });
-        }
-
-        function removeWeapon(index) {
-            if (!playerDocRef) return;
-            playerDocRef.get().then((doc) => {
-                if (doc.exists) {
-                    let weapons = doc.data().weapons || [];
-                    weapons.splice(index, 1);
-                    playerDocRef.update({weapons: weapons});
-                }
             });
         }
 
@@ -403,12 +488,14 @@
             const name = document.getElementById("new-store-item").value.trim();
             const cost = parseInt(document.getElementById("new-store-cost").value) || 0;
             const currency = document.getElementById("new-store-currency").value;
+            const type = document.getElementById("new-store-type").value;
             if (!name) return;
 
             sessionRef.collection("store").add({
                 name: name,
                 cost: cost,
                 currency: currency,
+                type: type,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById("new-store-item").value = "";
@@ -422,7 +509,7 @@
                 if (!storeContainer) return;
                 storeContainer.innerHTML = "";
                 if (snapshot.empty) {
-                    storeContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No store items available yet.</span>';
+                    storeContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No items for sale right now.</span>';
                     return;
                 }
                 snapshot.forEach((doc) => {
@@ -433,17 +520,17 @@
                     div.className = "p-3 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
                     div.innerHTML = `
                         <div>
-                            <div class="font-semibold text-slate-200">${item.name}</div>
+                            <div class="font-semibold text-slate-200">${item.name} <span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 uppercase">${item.type || 'backpack'}</span></div>
                             <div class="${currencyColor} font-mono text-xs">${item.cost} ${item.currency}</div>
                         </div>
-                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
+                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
                     `;
                     storeContainer.appendChild(div);
                 });
             });
         }
 
-        function buyStoreItem(itemName, cost, currency) {
+        function buyStoreItem(itemName, cost, currency, itemType) {
             if (!playerDocRef) return;
             playerDocRef.get().then((doc) => {
                 if (!doc.exists) return;
@@ -453,17 +540,28 @@
                     alert(`Not enough ${currency}! You need ${cost} but only have ${currentFunds}.`);
                     return;
                 }
-                let backpack = data.backpack || [];
-                backpack.push(itemName);
-                
+
                 let updatePayload = {
-                    backpack: backpack,
                     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                 };
                 updatePayload[currency.toLowerCase()] = currentFunds - cost;
 
+                if (itemType === 'equipment') {
+                    let equipment = data.equipment || [];
+                    equipment.push(itemName);
+                    updatePayload.equipment = equipment;
+                } else if (itemType === 'weapon') {
+                    let weapons = data.weapons || [];
+                    weapons.push({name: itemName, ammo: 0});
+                    updatePayload.weapons = weapons;
+                } else {
+                    let backpack = data.backpack || [];
+                    backpack.push(itemName);
+                    updatePayload.backpack = backpack;
+                }
+
                 playerDocRef.update(updatePayload);
-                alert(`Successfully purchased ${itemName}!`);
+                alert(`Successfully purchased and received ${itemName}!`);
             });
         }
 
@@ -506,15 +604,12 @@
             document.getElementById("dm-inspect-sp").innerText = data.sp || 0;
             document.getElementById("dm-inspect-cp").innerText = data.cp || 0;
 
-            // Render Equipment
             const eqContainer = document.getElementById("dm-inspect-equipment");
             eqContainer.innerHTML = (data.equipment && data.equipment.length > 0) ? data.equipment.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
 
-            // Render Weapons
             const wpContainer = document.getElementById("dm-inspect-weapons");
             wpContainer.innerHTML = (data.weapons && data.weapons.length > 0) ? data.weapons.map(w => `<div>• ${w.name} ${w.ammo > 0 ? `(Ammo: ${w.ammo})` : ''}</div>`).join('') : '<span class="text-slate-500 italic text-xs">None</span>';
 
-            // Render Backpack
             const bpContainer = document.getElementById("dm-inspect-backpack");
             bpContainer.innerHTML = (data.backpack && data.backpack.length > 0) ? data.backpack.map(i => `<div>• ${i}</div>`).join('') : '<span class="text-slate-500 italic text-xs">Empty</span>';
         }
