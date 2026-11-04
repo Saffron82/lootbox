@@ -71,12 +71,12 @@
                 <div class="flex flex-col gap-1">
                     <label class="text-xs text-slate-400 uppercase tracking-wider font-bold">Select Character Class</label>
                     <select id="user-class" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
-                        <option value="Fighter">Fighter (Heavy Armor, Sword, Shield)</option>
-                        <option value="Rogue">Rogue (Leather Armor, Daggers, Thieves' Tools)</option>
-                        <option value="Wizard">Wizard (Robes, Quarterstaff, Spellbook, Arcane Focus)</option>
-                        <option value="Cleric">Cleric (Scale Mail, Mace, Holy Symbol)</option>
-                        <option value="Barbarian">Barbarian (Greataxe, Handaxes, Explorer's Pack)</option>
-                        <option value="Ranger">Ranger (Studded Leather, Longbow, Shortswords)</option>
+                        <option value="Fighter">Fighter (Heavy Armor, Sword, Shield, Explorer's Pack)</option>
+                        <option value="Rogue">Rogue (Leather Armor, Daggers, Burglar's Pack)</option>
+                        <option value="Wizard">Wizard (Robes, Quarterstaff, Scholar's Pack)</option>
+                        <option value="Cleric">Cleric (Scale Mail, Mace, Priest's Pack)</option>
+                        <option value="Barbarian">Barbarian (Greataxe, Explorer's Pack)</option>
+                        <option value="Ranger">Ranger (Studded Leather, Longbow, Dungeoneer's Pack)</option>
                     </select>
                 </div>
             </div>
@@ -135,11 +135,34 @@
                     </div>
                 </div>
 
-                <!-- DM Store / Merchant Manager -->
-                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
-                    <h3 class="text-md font-semibold text-slate-300">Manage Town Store / Merchant Items</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
-                        <input type="text" id="new-store-item" placeholder="Item Name" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                <!-- DM Store / Merchant Manager with Quick Presets -->
+                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-md font-semibold text-amber-400">Manage Stores (Town & Traveling Merchant)</h3>
+                        <button onclick="clearAllStores()" class="bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 text-xs px-3 py-1.5 rounded font-bold">Close All Stores (Combat Mode)</button>
+                    </div>
+                    
+                    <!-- Quick Presets -->
+                    <div class="flex flex-col gap-1.5">
+                        <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Quick Add Presets (1-Click)</span>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="quickAddStoreItem('Hot Meal & Ale', 5, 'SP', 'backpack', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Tavern Meal (5 SP)</button>
+                            <button onclick="quickAddStoreItem('Night Lodging', 2, 'GP', 'backpack', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Inn Lodging (2 GP)</button>
+                            <button onclick="quickAddStoreItem('Dagger', 2, 'GP', 'weapon', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Dagger</button>
+                            <button onclick="quickAddStoreItem('Longsword', 15, 'GP', 'weapon', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Longsword</button>
+                            <button onclick="quickAddStoreItem('Bastard Sword +1', 500, 'GP', 'weapon', 'town')" class="bg-amber-950 hover:bg-amber-900 border border-amber-700 text-xs px-2.5 py-1 rounded text-amber-200">+ Bastard Sword +1</button>
+                            <button onclick="quickAddStoreItem('Health Potion', 50, 'GP', 'backpack', 'traveling')" class="bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-xs px-2.5 py-1 rounded text-emerald-200">+ Traveling Potion</button>
+                            <button onclick="quickAddStoreItem('Arrows (20)', 1, 'GP', 'backpack', 'traveling')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Traveling Ammo</button>
+                        </div>
+                    </div>
+
+                    <!-- Custom Add Form -->
+                    <div class="grid grid-cols-1 md:grid-cols-6 gap-2 pt-2 border-t border-slate-800">
+                        <select id="new-store-location" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                            <option value="town">Town Store / Inn</option>
+                            <option value="traveling">Traveling Merchant</option>
+                        </select>
+                        <input type="text" id="new-store-item" placeholder="Item Name (e.g. Ale +1)" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                         <input type="number" id="new-store-cost" placeholder="Cost" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                         <select id="new-store-currency" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                             <option value="GP">Gold (GP)</option>
@@ -147,9 +170,9 @@
                             <option value="CP">Copper (CP)</option>
                         </select>
                         <select id="new-store-type" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                            <option value="backpack">Backpack</option>
                             <option value="equipment">Equipment</option>
                             <option value="weapon">Weapon</option>
-                            <option value="backpack">Backpack</option>
                         </select>
                         <button onclick="addStoreItem()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded text-sm">Add Item</button>
                     </div>
@@ -229,13 +252,26 @@
                     </div>
                 </div>
 
-                <!-- Town Store & Merchant Section -->
-                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
-                    <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
-                        <span>🛒</span> Town Store & Traveling Merchant
-                    </h3>
-                    <div id="store-items-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <span class="text-xs text-slate-500 italic">No items for sale right now.</span>
+                <!-- Stores Section (Only visible when DM populates them) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Town Store & Inn -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
+                            <span>🏛️</span> Town Store, Inn & Tavern
+                        </h3>
+                        <div id="town-store-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">No town or tavern open right now.</span>
+                        </div>
+                    </div>
+
+                    <!-- Traveling Merchant -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
+                            <span>⛺</span> Traveling Merchant
+                        </h3>
+                        <div id="traveling-store-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">No merchant nearby.</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -253,13 +289,20 @@
         let sessionRef = null;
         let cachedPlayersData = {};
 
-        // Starting gear presets based on D&D / Pathfinder classes
+        const packContents = {
+            "Explorer's Pack": ["Bedroll", "Rations (10 days)", "Tinderbox", "Torch (10)", "Hempen Rope (50ft)"],
+            "Burglar's Pack": ["Ball Bearings (bag)", "String (10ft)", "Bell", "Candles (5)", "Crowbar", "Oil (flask)"],
+            "Scholar's Pack": ["Book of Lore", "Ink (1 oz bottle)", "Ink Pen", "Parchment (10 sheets)", "Sand Bag"],
+            "Priest's Pack": ["Blanket", "Candles (10)", "Tinderbox", "Alms Box", "Incense (2 blocks)", "Vestments"],
+            "Dungeoneer's Pack": ["Crowbar", "Torch (10)", "Tinderbox", "Rations (10 days)", "Waterskin", "Hempen Rope (50ft)"]
+        };
+
         const classPresets = {
             "Fighter": {
                 gp: 15, sp: 10, cp: 50,
                 equipment: ["Chain Mail", "Shield"],
                 weapons: [{name: "Longsword", ammo: 0}, {name: "Heavy Crossbow", ammo: 20}],
-                backpack: ["Explorer's Pack", "Dungeoneer's Pack"]
+                backpack: ["Explorer's Pack"]
             },
             "Rogue": {
                 gp: 25, sp: 20, cp: 100,
@@ -269,9 +312,9 @@
             },
             "Wizard": {
                 gp: 10, sp: 50, cp: 200,
-                equipment: ["Robes", "Arcane Focus (Wand)"],
+                equipment: ["Robes", "Arcane Focus"],
                 weapons: [{name: "Quarterstaff", ammo: 0}],
-                backpack: ["Spellbook", "Scholar's Pack", "Component Pouch"]
+                backpack: ["Scholar's Pack", "Component Pouch"]
             },
             "Cleric": {
                 gp: 20, sp: 15, cp: 80,
@@ -289,7 +332,7 @@
                 gp: 20, sp: 20, cp: 50,
                 equipment: ["Studded Leather Armor"],
                 weapons: [{name: "Longbow", ammo: 30}, {name: "Shortsword", ammo: 0}],
-                backpack: ["Dungeoneer's Pack", "Rations (5 days)"]
+                backpack: ["Dungeoneer's Pack"]
             }
         };
 
@@ -326,7 +369,6 @@
             
             playerDocRef.get().then((doc) => {
                 if (!doc.exists) {
-                    // Generate starting gear based on selected class preset
                     const preset = classPresets[playerClass] || classPresets["Fighter"];
                     playerDocRef.set({
                         name: playerName,
@@ -399,6 +441,31 @@
                     weapons.push({name: weaponName, ammo: ammoCount});
                     playerDocRef.update({weapons: weapons});
                 }
+            });
+        }
+
+        function openPack(index) {
+            if (!playerDocRef) return;
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) return;
+                let data = doc.data();
+                let backpack = data.backpack || [];
+                let packName = backpack[index];
+
+                if (!packContents[packName]) {
+                    alert("This item is not a recognized adventure pack.");
+                    return;
+                }
+
+                backpack.splice(index, 1);
+                let itemsToAdd = packContents[packName];
+                backpack = backpack.concat(itemsToAdd);
+
+                playerDocRef.update({
+                    backpack: backpack,
+                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert(`Successfully unpacked ${packName}! Items added to your backpack.`);
             });
         }
 
@@ -484,8 +551,10 @@
                 
                 let actionButtons = '';
                 if (category === 'backpack') {
+                    let openButton = packContents[item] ? `<button onclick="openPack(${index})" class="bg-emerald-800 hover:bg-emerald-700 text-emerald-100 text-xs px-2 py-0.5 rounded font-bold">Open Pack</button>` : '';
                     actionButtons = `
-                        <div class="flex gap-1 mt-1">
+                        <div class="flex flex-wrap gap-1 mt-1">
+                            ${openButton}
                             <button onclick="moveItem('backpack', 'equipment', ${index})" class="bg-indigo-900 hover:bg-indigo-800 text-indigo-200 text-xs px-2 py-0.5 rounded">Equip</button>
                             <button onclick="sellItem('backpack', ${index})" class="bg-amber-900 hover:bg-amber-800 text-amber-200 text-xs px-2 py-0.5 rounded">Sell</button>
                             <button onclick="discardItem('backpack', ${index})" class="bg-red-950 hover:bg-red-900 text-red-300 text-xs px-2 py-0.5 rounded">Drop</button>
@@ -551,7 +620,19 @@
             });
         }
 
+        function quickAddStoreItem(name, cost, currency, type, location) {
+            sessionRef.collection("store").add({
+                name: name,
+                cost: cost,
+                currency: currency,
+                type: type,
+                location: location,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        }
+
         function addStoreItem() {
+            const location = document.getElementById("new-store-location").value;
             const name = document.getElementById("new-store-item").value.trim();
             const cost = parseInt(document.getElementById("new-store-cost").value) || 0;
             const currency = document.getElementById("new-store-currency").value;
@@ -563,6 +644,7 @@
                 cost: cost,
                 currency: currency,
                 type: type,
+                location: location,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById("new-store-item").value = "";
@@ -570,30 +652,60 @@
             });
         }
 
+        function clearAllStores() {
+            if (!confirm("Are you sure you want to close all stores and remove all items for sale? (Combat Mode)")) return;
+            sessionRef.collection("store").get().then((snapshot) => {
+                let batch = db.batch();
+                snapshot.docs.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+                batch.commit();
+            });
+        }
+
         function initStoreListener() {
             sessionRef.collection("store").onSnapshot((snapshot) => {
-                const storeContainer = document.getElementById("store-items-list");
-                if (!storeContainer) return;
-                storeContainer.innerHTML = "";
-                if (snapshot.empty) {
-                    storeContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No items for sale right now.</span>';
-                    return;
-                }
+                const townContainer = document.getElementById("town-store-list");
+                const travelingContainer = document.getElementById("traveling-store-list");
+                if (!townContainer || !travelingContainer) return;
+                
+                townContainer.innerHTML = "";
+                travelingContainer.innerHTML = "";
+                
+                let townCount = 0;
+                let travelingCount = 0;
+
                 snapshot.forEach((doc) => {
                     const item = doc.data();
                     const itemId = doc.id;
+                    const location = item.location || 'town';
                     const currencyColor = item.currency === 'GP' ? 'text-amber-400' : (item.currency === 'SP' ? 'text-slate-300' : 'text-amber-700');
+                    
                     const div = document.createElement("div");
-                    div.className = "p-3 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
+                    div.className = "p-2.5 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
                     div.innerHTML = `
                         <div>
-                            <div class="font-semibold text-slate-200">${item.name} <span class="text-[10px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 uppercase">${item.type || 'backpack'}</span></div>
+                            <div class="font-semibold text-slate-200">${item.name} <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 uppercase">${item.type || 'backpack'}</span></div>
                             <div class="${currencyColor} font-mono text-xs">${item.cost} ${item.currency}</div>
                         </div>
-                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
+                        ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
                     `;
-                    storeContainer.appendChild(div);
+
+                    if (location === 'traveling') {
+                        travelingContainer.appendChild(div);
+                        travelingCount++;
+                    } else {
+                        townContainer.appendChild(div);
+                        townCount++;
+                    }
                 });
+
+                if (townCount === 0) {
+                    townContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No town or tavern open right now.</span>';
+                }
+                if (travelingCount === 0) {
+                    travelingContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No merchant nearby.</span>';
+                }
             });
         }
 
