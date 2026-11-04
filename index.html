@@ -98,6 +98,29 @@
                     <p class="text-sm text-slate-400">Active Session: <span id="active-dm-room" class="text-slate-200 font-mono"></span></p>
                 </div>
 
+                <!-- Treasure Splitter Tool (DM Feature) -->
+                <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                    <h3 class="text-md font-semibold text-amber-400">💰 Treasure Splitter (Distribute Loot)</h3>
+                    <p class="text-xs text-slate-400">Enter total loot found. It will be divided equally among all active party players, dropping remainders (taxes/temple).</p>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-bold">Total GP</label>
+                            <input type="number" id="loot-gp" value="0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-amber-400 font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-bold">Total SP</label>
+                            <input type="number" id="loot-sp" value="0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-300 font-bold">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 uppercase font-bold">Total CP</label>
+                            <input type="number" id="loot-cp" value="0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-amber-700 font-bold">
+                        </div>
+                    </div>
+                    <button onclick="splitTreasure()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2 px-4 rounded text-sm transition-colors mt-1">
+                        Distribute Loot Equally to All Party Members
+                    </button>
+                </div>
+
                 <!-- Party Member Inspection Selector -->
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                     <h3 class="text-md font-semibold text-slate-300">Party Member Sheets (Inspect & Manage Player)</h3>
@@ -146,17 +169,17 @@
                     <div class="flex flex-col gap-2">
                         <!-- Inn & Tavern -->
                         <div class="flex flex-col gap-1">
-                            <span class="text-[11px] text-amber-400 font-bold uppercase">🍺 Inn & Tavern</span>
+                            <span class="text-[11px] text-amber-400 font-bold uppercase">🍺 Inn & Tavern (Lodging / Food Service)</span>
                             <div class="flex flex-wrap gap-1.5">
-                                <button onclick="quickAddStoreItem('Ale Pint', 2, 'SP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Ale (2 SP)</button>
-                                <button onclick="quickAddStoreItem('Hot Stew & Bread', 5, 'SP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Hot Stew (5 SP)</button>
-                                <button onclick="quickAddStoreItem('Standard Room Bed', 1, 'GP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Room (1 GP)</button>
-                                <button onclick="quickAddStoreItem('Fine Wine Bottle', 10, 'GP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Fine Wine (10 GP)</button>
+                                <button onclick="quickAddStoreItem('Ale Pint', 2, 'SP', 'inn_service', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Ale (2 SP)</button>
+                                <button onclick="quickAddStoreItem('Hot Stew & Bread', 5, 'SP', 'inn_service', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Hot Stew (5 SP)</button>
+                                <button onclick="quickAddStoreItem('Standard Room Bed', 1, 'GP', 'inn_service', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Room (1 GP)</button>
+                                <button onclick="quickAddStoreItem('Fine Wine Bottle', 10, 'GP', 'inn_service', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Fine Wine (10 GP)</button>
                                 <button onclick="clearSingleStore('inn')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear Inn</button>
                             </div>
                         </div>
 
-                        <!-- General Store (Including Adventure Packs) -->
+                        <!-- General Store -->
                         <div class="flex flex-col gap-1 mt-1">
                             <span class="text-[11px] text-indigo-400 font-bold uppercase">📦 General Store & Adventure Packs</span>
                             <div class="flex flex-wrap gap-1.5">
@@ -217,6 +240,7 @@
                             <option value="backpack">Backpack</option>
                             <option value="equipment">Equipment</option>
                             <option value="weapon">Weapon</option>
+                            <option value="inn_service">Lodging / Service</option>
                         </select>
                         <button onclick="addStoreItem()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded text-sm">Add Item</button>
                     </div>
@@ -656,6 +680,42 @@
             });
         }
 
+        // DM Control: Split Treasure Equally Among All Active Players
+        function splitTreasure() {
+            if (!sessionRef) return;
+            let totalGp = parseInt(document.getElementById("loot-gp").value) || 0;
+            let totalSp = parseInt(document.getElementById("loot-sp").value) || 0;
+            let totalCp = parseInt(document.getElementById("loot-cp").value) || 0;
+
+            sessionRef.collection("players").get().then((snapshot) => {
+                if (snapshot.empty) {
+                    alert("No active players in the session to split loot with.");
+                    return;
+                }
+
+                let playerCount = snapshot.size;
+                let shareGp = Math.floor(totalGp / playerCount);
+                let shareSp = Math.floor(totalSp / playerCount);
+                let shareCp = Math.floor(totalCp / playerCount);
+
+                let batch = db.batch();
+                snapshot.docs.forEach((doc) => {
+                    let pData = doc.data();
+                    let newGp = (pData.gp || 0) + shareGp;
+                    let newSp = (pData.sp || 0) + shareSp;
+                    let newCp = (pData.cp || 0) + shareCp;
+                    batch.update(doc.ref, { gp: newGp, sp: newSp, cp: newCp });
+                });
+
+                batch.commit().then(() => {
+                    alert(`Loot successfully split among ${playerCount} players!\nEach received: ${shareGp} GP, ${shareSp} SP, ${shareCp} CP.\nRemainders discarded as taxes/temple donations.`);
+                    document.getElementById("loot-gp").value = 0;
+                    document.getElementById("loot-sp").value = 0;
+                    document.getElementById("loot-cp").value = 0;
+                });
+            });
+        }
+
         function renderCategoryList(category, items) {
             const container = document.getElementById(`list-${category}`);
             container.innerHTML = "";
@@ -858,22 +918,29 @@
                 };
                 updatePayload[currencyKey] = currentFunds - cost;
 
-                if (itemType === 'equipment') {
-                    let equipment = data.equipment || [];
-                    equipment.push(itemName);
-                    updatePayload.equipment = equipment;
-                } else if (itemType === 'weapon') {
-                    let weapons = data.weapons || [];
-                    weapons.push({name: itemName, ammo: 0});
-                    updatePayload.weapons = weapons;
-                } else {
-                    let backpack = data.backpack || [];
-                    backpack.push(itemName);
-                    updatePayload.backpack = backpack;
+                // If it's lodging or service from the Inn, do NOT add to inventory
+                if (itemType !== 'inn_service') {
+                    if (itemType === 'equipment') {
+                        let equipment = data.equipment || [];
+                        equipment.push(itemName);
+                        updatePayload.equipment = equipment;
+                    } else if (itemType === 'weapon') {
+                        let weapons = data.weapons || [];
+                        weapons.push({name: itemName, ammo: 0});
+                        updatePayload.weapons = weapons;
+                    } else {
+                        let backpack = data.backpack || [];
+                        backpack.push(itemName);
+                        updatePayload.backpack = backpack;
+                    }
                 }
 
                 playerDocRef.update(updatePayload);
-                alert(`Successfully purchased and received ${itemName}!`);
+                if (itemType === 'inn_service') {
+                    alert(`Successfully paid ${cost} ${currency} for ${itemName}. Enjoy your stay!`);
+                } else {
+                    alert(`Successfully purchased and received ${itemName}!`);
+                }
             });
         }
 
