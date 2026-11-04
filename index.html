@@ -135,34 +135,75 @@
                     </div>
                 </div>
 
-                <!-- DM Store / Merchant Manager with Quick Presets -->
+                <!-- DM Multi-Store Manager -->
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-4">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-md font-semibold text-amber-400">Manage Stores (Town & Traveling Merchant)</h3>
+                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
+                        <h3 class="text-md font-semibold text-amber-400">Manage 4 Specialized Stores</h3>
                         <button onclick="clearAllStores()" class="bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 text-xs px-3 py-1.5 rounded font-bold">Close All Stores (Combat Mode)</button>
                     </div>
                     
-                    <!-- Quick Presets -->
-                    <div class="flex flex-col gap-1.5">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Quick Add Presets (1-Click)</span>
-                        <div class="flex flex-wrap gap-1.5">
-                            <button onclick="quickAddStoreItem('Hot Meal & Ale', 5, 'SP', 'backpack', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Tavern Meal (5 SP)</button>
-                            <button onclick="quickAddStoreItem('Night Lodging', 2, 'GP', 'backpack', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Inn Lodging (2 GP)</button>
-                            <button onclick="quickAddStoreItem('Dagger', 2, 'GP', 'weapon', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Dagger</button>
-                            <button onclick="quickAddStoreItem('Longsword', 15, 'GP', 'weapon', 'town')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Longsword</button>
-                            <button onclick="quickAddStoreItem('Bastard Sword +1', 500, 'GP', 'weapon', 'town')" class="bg-amber-950 hover:bg-amber-900 border border-amber-700 text-xs px-2.5 py-1 rounded text-amber-200">+ Bastard Sword +1</button>
-                            <button onclick="quickAddStoreItem('Health Potion', 50, 'GP', 'backpack', 'traveling')" class="bg-emerald-950 hover:bg-emerald-900 border border-emerald-700 text-xs px-2.5 py-1 rounded text-emerald-200">+ Traveling Potion</button>
-                            <button onclick="quickAddStoreItem('Arrows (20)', 1, 'GP', 'backpack', 'traveling')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2.5 py-1 rounded text-slate-200">+ Traveling Ammo</button>
+                    <!-- Quick Add Presets by Store Category -->
+                    <div class="flex flex-col gap-2">
+                        <!-- Inn & Tavern -->
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[11px] text-amber-400 font-bold uppercase">🍺 Inn & Tavern</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="quickAddStoreItem('Ale Pint', 2, 'SP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Ale (2 SP)</button>
+                                <button onclick="quickAddStoreItem('Hot Stew & Bread', 5, 'SP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Hot Stew (5 SP)</button>
+                                <button onclick="quickAddStoreItem('Standard Room Bed', 1, 'GP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Room (1 GP)</button>
+                                <button onclick="quickAddStoreItem('Fine Wine Bottle', 10, 'GP', 'backpack', 'inn')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Fine Wine (10 GP)</button>
+                                <button onclick="clearSingleStore('inn')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear Inn</button>
+                            </div>
+                        </div>
+
+                        <!-- General Store -->
+                        <div class="flex flex-col gap-1 mt-1">
+                            <span class="text-[11px] text-indigo-400 font-bold uppercase">📦 General Store</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="quickAddStoreItem('Torch (5)', 5, 'CP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Torches (5 CP)</button>
+                                <button onclick="quickAddStoreItem('Rations (5 days)', 2, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rations (2 GP)</button>
+                                <button onclick="quickAddStoreItem('Hempen Rope 50ft', 1, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rope (1 GP)</button>
+                                <button onclick="quickAddStoreItem("Explorer's Pack", 10, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Explorer's Pack</button>
+                                <button onclick="quickAddStoreItem("Burglar's Pack", 16, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Burglar's Pack</button>
+                                <button onclick="clearSingleStore('general')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear General</button>
+                            </div>
+                        </div>
+
+                        <!-- Forge & Armory -->
+                        <div class="flex flex-col gap-1 mt-1">
+                            <span class="text-[11px] text-emerald-400 font-bold uppercase">⚔️ Forge & Armory</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="quickAddStoreItem('Dagger', 2, 'GP', 'weapon', 'forge')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Dagger</button>
+                                <button onclick="quickAddStoreItem('Longsword', 15, 'GP', 'weapon', 'forge')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Longsword</button>
+                                <button onclick="quickAddStoreItem('Bastard Sword', 35, 'GP', 'weapon', 'forge')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Bastard Sword</button>
+                                <button onclick="quickAddStoreItem('Bastard Sword +1', 500, 'GP', 'weapon', 'forge')" class="bg-amber-950 hover:bg-amber-900 border border-amber-700 text-xs px-2 py-1 rounded text-amber-200">+ Bastard Sword +1</button>
+                                <button onclick="quickAddStoreItem('Plate Armor', 1500, 'GP', 'equipment', 'forge')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Plate Armor</button>
+                                <button onclick="clearSingleStore('forge')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear Forge</button>
+                            </div>
+                        </div>
+
+                        <!-- Magic & Apothecary -->
+                        <div class="flex flex-col gap-1 mt-1">
+                            <span class="text-[11px] text-purple-400 font-bold uppercase">🧪 Magic & Apothecary</span>
+                            <div class="flex flex-wrap gap-1.5">
+                                <button onclick="quickAddStoreItem('Health Potion', 50, 'GP', 'backpack', 'magic')" class="bg-purple-950 hover:bg-purple-900 border border-purple-700 text-xs px-2 py-1 rounded text-purple-200">+ Health Potion</button>
+                                <button onclick="quickAddStoreItem('Anti-Toxin Potion', 50, 'GP', 'backpack', 'magic')" class="bg-purple-950 hover:bg-purple-900 border border-purple-700 text-xs px-2 py-1 rounded text-purple-200">+ Anti-Toxin</button>
+                                <button onclick="quickAddStoreItem('Wizard Robe +1', 250, 'GP', 'equipment', 'magic')" class="bg-purple-950 hover:bg-purple-900 border border-purple-700 text-xs px-2 py-1 rounded text-purple-200">+ Robe +1</button>
+                                <button onclick="quickAddStoreItem('Wand of Magic Missiles', 500, 'GP', 'weapon', 'magic')" class="bg-purple-950 hover:bg-purple-900 border border-purple-700 text-xs px-2 py-1 rounded text-purple-200">+ Magic Wand</button>
+                                <button onclick="clearSingleStore('magic')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear Magic</button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Custom Add Form -->
                     <div class="grid grid-cols-1 md:grid-cols-6 gap-2 pt-2 border-t border-slate-800">
                         <select id="new-store-location" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
-                            <option value="town">Town Store / Inn</option>
-                            <option value="traveling">Traveling Merchant</option>
+                            <option value="inn">🍺 Inn & Tavern</option>
+                            <option value="general">📦 General Store</option>
+                            <option value="forge">⚔️ Forge & Armory</option>
+                            <option value="magic">🧪 Magic & Apothecary</option>
                         </select>
-                        <input type="text" id="new-store-item" placeholder="Item Name (e.g. Ale +1)" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
+                        <input type="text" id="new-store-item" placeholder="Custom Item Name" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                         <input type="number" id="new-store-cost" placeholder="Cost" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                         <select id="new-store-currency" class="bg-slate-900 border border-slate-700 rounded p-2 text-sm text-slate-100">
                             <option value="GP">Gold (GP)</option>
@@ -252,25 +293,45 @@
                     </div>
                 </div>
 
-                <!-- Stores Section (Only visible when DM populates them) -->
+                <!-- 4 Specialized Stores Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Town Store & Inn -->
+                    <!-- Inn & Tavern -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
                         <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
-                            <span>🏛️</span> Town Store, Inn & Tavern
+                            <span>🍺</span> Inn & Tavern
                         </h3>
-                        <div id="town-store-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
-                            <span class="text-xs text-slate-500 italic">No town or tavern open right now.</span>
+                        <div id="store-inn-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">Closed.</span>
                         </div>
                     </div>
 
-                    <!-- Traveling Merchant -->
+                    <!-- General Store -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
-                        <h3 class="text-md font-semibold text-amber-400 flex items-center gap-2">
-                            <span>⛺</span> Traveling Merchant
+                        <h3 class="text-md font-semibold text-indigo-400 flex items-center gap-2">
+                            <span>📦</span> General Store
                         </h3>
-                        <div id="traveling-store-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
-                            <span class="text-xs text-slate-500 italic">No merchant nearby.</span>
+                        <div id="store-general-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">Closed.</span>
+                        </div>
+                    </div>
+
+                    <!-- Forge & Armory -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <h3 class="text-md font-semibold text-emerald-400 flex items-center gap-2">
+                            <span>⚔️</span> Forge & Armory
+                        </h3>
+                        <div id="store-forge-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">Closed.</span>
+                        </div>
+                    </div>
+
+                    <!-- Magic & Apothecary -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <h3 class="text-md font-semibold text-purple-400 flex items-center gap-2">
+                            <span>🧪</span> Magic & Apothecary
+                        </h3>
+                        <div id="store-magic-list" class="flex flex-col gap-2 max-h-40 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">Closed.</span>
                         </div>
                     </div>
                 </div>
@@ -652,8 +713,18 @@
             });
         }
 
+        function clearSingleStore(locationKey) {
+            sessionRef.collection("store").where("location", "==", locationKey).get().then((snapshot) => {
+                let batch = db.batch();
+                snapshot.docs.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+                batch.commit();
+            });
+        }
+
         function clearAllStores() {
-            if (!confirm("Are you sure you want to close all stores and remove all items for sale? (Combat Mode)")) return;
+            if (!confirm("Are you sure you want to close ALL stores? (Combat Mode)")) return;
             sessionRef.collection("store").get().then((snapshot) => {
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
@@ -665,24 +736,30 @@
 
         function initStoreListener() {
             sessionRef.collection("store").onSnapshot((snapshot) => {
-                const townContainer = document.getElementById("town-store-list");
-                const travelingContainer = document.getElementById("traveling-store-list");
-                if (!townContainer || !travelingContainer) return;
+                const stores = {
+                    inn: document.getElementById("store-inn-list"),
+                    general: document.getElementById("store-general-list"),
+                    forge: document.getElementById("store-forge-list"),
+                    magic: document.getElementById("store-magic-list")
+                };
                 
-                townContainer.innerHTML = "";
-                travelingContainer.innerHTML = "";
-                
-                let townCount = 0;
-                let travelingCount = 0;
+                if (!stores.inn) return;
+
+                // Reset all store containers
+                Object.keys(stores).forEach(key => {
+                    if (stores[key]) stores[key].innerHTML = "";
+                });
+
+                const counts = { inn: 0, general: 0, forge: 0, magic: 0 };
 
                 snapshot.forEach((doc) => {
                     const item = doc.data();
                     const itemId = doc.id;
-                    const location = item.location || 'town';
+                    const loc = item.location || 'general';
                     const currencyColor = item.currency === 'GP' ? 'text-amber-400' : (item.currency === 'SP' ? 'text-slate-300' : 'text-amber-700');
                     
                     const div = document.createElement("div");
-                    div.className = "p-2.5 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
+                    div.className = "p-2 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
                     div.innerHTML = `
                         <div>
                             <div class="font-semibold text-slate-200">${item.name} <span class="text-[9px] bg-slate-800 px-1.5 py-0.5 rounded text-slate-400 uppercase">${item.type || 'backpack'}</span></div>
@@ -691,21 +768,17 @@
                         ${currentRole === 'player' ? `<button onclick="buyStoreItem('${item.name}', ${item.cost}, '${item.currency}', '${item.type || 'backpack'}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-2.5 py-1 rounded font-bold">Buy</button>` : `<button onclick="deleteStoreItem('${itemId}')" class="text-red-400 hover:text-red-300 text-xs px-2 py-1">Remove</button>`}
                     `;
 
-                    if (location === 'traveling') {
-                        travelingContainer.appendChild(div);
-                        travelingCount++;
-                    } else {
-                        townContainer.appendChild(div);
-                        townCount++;
+                    if (stores[loc]) {
+                        stores[loc].appendChild(div);
+                        counts[loc]++;
                     }
                 });
 
-                if (townCount === 0) {
-                    townContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No town or tavern open right now.</span>';
-                }
-                if (travelingCount === 0) {
-                    travelingContainer.innerHTML = '<span class="text-xs text-slate-500 italic">No merchant nearby.</span>';
-                }
+                // Display empty/closed state if no items in that category
+                if (counts.inn === 0) stores.inn.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
+                if (counts.general === 0) stores.general.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
+                if (counts.forge === 0) stores.forge.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
+                if (counts.magic === 0) stores.magic.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
             });
         }
 
