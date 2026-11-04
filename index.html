@@ -167,10 +167,13 @@
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-4">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-2">
                         <h3 class="text-md font-semibold text-amber-400">Manage 4 Specialized Stores & Default Lists</h3>
-                        <button onclick="clearAllStores()" class="bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 text-xs px-3 py-1.5 rounded font-bold">Close All Stores (Combat Mode)</button>
+                        <div class="flex gap-2">
+                            <button onclick="toggleAllStores(false)" class="bg-amber-950 hover:bg-amber-900 text-amber-300 border border-amber-800 text-xs px-3 py-1.5 rounded font-bold">Close All Stores</button>
+                            <button onclick="toggleAllStores(true)" class="bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-xs px-3 py-1.5 rounded font-bold">Open All Stores</button>
+                        </div>
                     </div>
                     
-                    <!-- Quick Add Presets (Editable / Customisable Default Lists) -->
+                    <!-- Quick Add Presets Manager -->
                     <div class="flex flex-col gap-2">
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-slate-400 uppercase tracking-wider font-bold">Quick-Add Preset Manager (Modify Default Lists)</span>
@@ -205,23 +208,47 @@
                         <button onclick="addStoreItem()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold px-4 py-2 rounded text-sm">Add Item</button>
                     </div>
 
-                    <!-- DM Live View of Active Stores (To add/remove items dynamically) -->
+                    <!-- DM Live View of Active Stores (To open/close/remove items dynamically) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
                         <div class="bg-slate-900 p-3 rounded border border-slate-800 flex flex-col gap-2">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-amber-400">🍺 Inn & Tavern (Live)</span><button onclick="clearSingleStore('inn')" class="text-red-400 text-[10px]">Clear</button></div>
-                            <div id="dm-store-inn-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">Closed.</div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-amber-400">🍺 Inn & Tavern (Live Control)</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="toggleSingleStore('inn', false)" class="text-amber-300 text-[10px] bg-amber-950 px-2 py-0.5 rounded border border-amber-800">Close</button>
+                                    <button onclick="toggleSingleStore('inn', true)" class="text-emerald-300 text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Open</button>
+                                </div>
+                            </div>
+                            <div id="dm-store-inn-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">No items.</div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded border border-slate-800 flex flex-col gap-2">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-indigo-400">📦 General Store (Live)</span><button onclick="clearSingleStore('general')" class="text-red-400 text-[10px]">Clear</button></div>
-                            <div id="dm-store-general-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">Closed.</div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-indigo-400">📦 General Store (Live Control)</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="toggleSingleStore('general', false)" class="text-amber-300 text-[10px] bg-amber-950 px-2 py-0.5 rounded border border-amber-800">Close</button>
+                                    <button onclick="toggleSingleStore('general', true)" class="text-emerald-300 text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Open</button>
+                                </div>
+                            </div>
+                            <div id="dm-store-general-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">No items.</div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded border border-slate-800 flex flex-col gap-2">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-emerald-400">⚔️ Forge & Armory (Live)</span><button onclick="clearSingleStore('forge')" class="text-red-400 text-[10px]">Clear</button></div>
-                            <div id="dm-store-forge-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">Closed.</div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-emerald-400">⚔️ Forge & Armory (Live Control)</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="toggleSingleStore('forge', false)" class="text-amber-300 text-[10px] bg-amber-950 px-2 py-0.5 rounded border border-amber-800">Close</button>
+                                    <button onclick="toggleSingleStore('forge', true)" class="text-emerald-300 text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Open</button>
+                                </div>
+                            </div>
+                            <div id="dm-store-forge-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">No items.</div>
                         </div>
                         <div class="bg-slate-900 p-3 rounded border border-slate-800 flex flex-col gap-2">
-                            <div class="flex justify-between items-center"><span class="text-xs font-bold text-purple-400">🧪 Magic & Apothecary (Live)</span><button onclick="clearSingleStore('magic')" class="text-red-400 text-[10px]">Clear</button></div>
-                            <div id="dm-store-magic-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">Closed.</div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-purple-400">🧪 Magic & Apothecary (Live Control)</span>
+                                <div class="flex gap-1.5">
+                                    <button onclick="toggleSingleStore('magic', false)" class="text-amber-300 text-[10px] bg-amber-950 px-2 py-0.5 rounded border border-amber-800">Close</button>
+                                    <button onclick="toggleSingleStore('magic', true)" class="text-emerald-300 text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">Open</button>
+                                </div>
+                            </div>
+                            <div id="dm-store-magic-list" class="flex flex-col gap-1.5 max-h-36 overflow-y-auto text-xs text-slate-400">No items.</div>
                         </div>
                     </div>
                 </div>
@@ -405,7 +432,6 @@
             }
         };
 
-        // Editable Default Store Presets (Stored locally/session modifiable)
         let defaultStorePresets = {
             inn: [
                 {name: "Ale Pint", cost: 2, currency: "SP", type: "inn_service"},
@@ -640,7 +666,6 @@
             });
         }
 
-        // DM Control: Remove item from a targeted player's inventory category
         function dmRemovePlayerItem(targetPlayerId, category, index) {
             if (!sessionRef) return;
             const targetRef = sessionRef.collection("players").doc(targetPlayerId);
@@ -659,7 +684,6 @@
             });
         }
 
-        // DM Control: Remove weapon from a targeted player
         function dmRemovePlayerWeapon(targetPlayerId, index) {
             if (!sessionRef) return;
             const targetRef = sessionRef.collection("players").doc(targetPlayerId);
@@ -676,7 +700,6 @@
             });
         }
 
-        // DM Control: Adjust ammo for a player's weapon directly
         function dmAdjustPlayerAmmo(targetPlayerId, index, amount) {
             if (!sessionRef) return;
             const targetRef = sessionRef.collection("players").doc(targetPlayerId);
@@ -694,7 +717,6 @@
             });
         }
 
-        // DM Control: Split Treasure with Players + Mercenaries Shares
         function splitTreasure() {
             if (!sessionRef) return;
             let totalGp = parseInt(document.getElementById("loot-gp").value) || 0;
@@ -872,6 +894,7 @@
                 currency: currency,
                 type: type,
                 location: location,
+                isOpen: true,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         }
@@ -890,6 +913,7 @@
                 currency: currency,
                 type: type,
                 location: location,
+                isOpen: true,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 document.getElementById("new-store-item").value = "";
@@ -897,22 +921,23 @@
             });
         }
 
-        function clearSingleStore(locationKey) {
+        // Toggle single store status (open/close instead of deleting)
+        function toggleSingleStore(locationKey, status) {
             sessionRef.collection("store").where("location", "==", locationKey).get().then((snapshot) => {
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
-                    batch.delete(doc.ref);
+                    batch.update(doc.ref, { isOpen: status });
                 });
                 batch.commit();
             });
         }
 
-        function clearAllStores() {
-            if (!confirm("Are you sure you want to close ALL stores? (Combat Mode)")) return;
+        // Toggle all stores status (open/close instead of deleting)
+        function toggleAllStores(status) {
             sessionRef.collection("store").get().then((snapshot) => {
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
-                    batch.delete(doc.ref);
+                    batch.update(doc.ref, { isOpen: status });
                 });
                 batch.commit();
             });
@@ -946,11 +971,12 @@
                     const item = doc.data();
                     const itemId = doc.id;
                     const loc = item.location || 'general';
+                    const isOpen = item.isOpen !== false; // por defecto abierto si no existe
                     const currencyColor = item.currency === 'GP' ? 'text-amber-400' : (item.currency === 'SP' ? 'text-slate-300' : 'text-amber-700');
                     const safeName = item.name.replace(/'/g, "\\'").replace(/"/g, '&quot;');
                     
-                    // Render for Player
-                    if (playerStores[loc]) {
+                    // Render for Player (Only items where isOpen is true)
+                    if (isOpen && playerStores[loc]) {
                         const div = document.createElement("div");
                         div.className = "p-2 bg-slate-900 rounded border border-slate-800 flex justify-between items-center text-sm";
                         div.innerHTML = `
@@ -964,16 +990,20 @@
                         counts[loc]++;
                     }
 
-                    // Render for DM (Live control panel)
+                    // Render for DM (Shows everything, indicates closed status with styling/badges, and allows toggle or delete)
                     if (dmStores[loc]) {
                         const divDm = document.createElement("div");
-                        divDm.className = "p-1.5 bg-slate-950 rounded border border-slate-800 flex justify-between items-center text-xs";
+                        divDm.className = `p-1.5 rounded border flex justify-between items-center text-xs ${isOpen ? 'bg-slate-950 border-slate-800' : 'bg-slate-900/50 border-slate-800/50 opacity-60'}`;
                         divDm.innerHTML = `
                             <div>
                                 <span class="font-semibold text-slate-200">${item.name}</span>
                                 <span class="${currencyColor} font-mono">(${item.cost} ${item.currency})</span>
+                                ${!isOpen ? '<span class="text-[9px] bg-amber-950 text-amber-300 px-1.5 py-0.2 rounded ml-1">Closed</span>' : ''}
                             </div>
-                            <button onclick="deleteStoreItem('${itemId}')" class="bg-red-950 hover:bg-red-900 text-red-300 px-2 py-0.5 rounded">Remove</button>
+                            <div class="flex gap-1">
+                                <button onclick="toggleItemStatus('${itemId}', ${!isOpen})" class="bg-slate-800 hover:bg-slate-700 text-slate-300 px-1.5 py-0.5 rounded text-[10px]">${isOpen ? 'Close' : 'Open'}</button>
+                                <button onclick="deleteStoreItem('${itemId}')" class="bg-red-950 hover:bg-red-900 text-red-300 px-1.5 py-0.5 rounded text-[10px]">Remove</button>
+                            </div>
                         `;
                         dmStores[loc].appendChild(divDm);
                         dmCounts[loc]++;
@@ -982,9 +1012,13 @@
 
                 Object.keys(playerStores).forEach(key => {
                     if (counts[key] === 0 && playerStores[key]) playerStores[key].innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
-                    if (dmCounts[key] === 0 && dmStores[key]) dmStores[key].innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
+                    if (dmCounts[key] === 0 && dmStores[key]) dmStores[key].innerHTML = '<span class="text-xs text-slate-500 italic">No items.</span>';
                 });
             });
+        }
+
+        function toggleItemStatus(itemId, newStatus) {
+            sessionRef.collection("store").doc(itemId).update({ isOpen: newStatus });
         }
 
         function buyStoreItem(itemName, cost, currency, itemType) {
