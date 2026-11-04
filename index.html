@@ -86,17 +86,27 @@
                     <h2 class="text-xl font-bold text-indigo-400" id="player-display-name">Character Sheet</h2>
                     <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-300 font-mono" id="active-player-room"></span>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Gold Card -->
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
                         <span class="text-xs text-slate-400 uppercase tracking-wider">Gold Pieces</span>
                         <div class="flex items-center gap-2 mt-1">
                             <span id="player-gold" class="text-2xl font-bold text-amber-400">0</span>
                             <button onclick="updateGold(10)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2.5 py-1 rounded font-bold">+10</button>
+                            <button onclick="updateGold(-10)" class="bg-slate-800 hover:bg-slate-700 text-xs px-2.5 py-1 rounded font-bold">-10</button>
                         </div>
                     </div>
-                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-1">
-                        <span class="text-xs text-slate-400 uppercase tracking-wider">Inventory Slots</span>
-                        <span class="text-2xl font-bold text-slate-200">3 / 10</span>
+
+                    <!-- Inventory Card -->
+                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider">Inventory Items</span>
+                            <button onclick="addItem()" class="bg-indigo-600 hover:bg-indigo-500 text-xs px-2.5 py-1 rounded text-white font-bold">+ Add Item</button>
+                        </div>
+                        <div id="player-inventory-list" class="flex flex-col gap-2 max-h-48 overflow-y-auto">
+                            <span class="text-xs text-slate-500 italic">No items in inventory.</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -109,6 +119,7 @@
         let currentRoom = "";
         let currentRole = "";
         let playerName = "";
+        let playerDocRef = null;
 
         function joinSession(role) {
             currentRoom = document.getElementById("session-code").value.trim();
@@ -130,46 +141,3 @@
                 document.getElementById("player-dashboard").classList.remove("hidden");
                 document.getElementById("player-display-name").innerText = playerName;
                 document.getElementById("active-player-room").innerText = currentRoom;
-                initPlayerSync();
-            }
-        }
-
-        function initPlayerSync() {
-            const playerRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
-            playerRef.set({
-                name: playerName,
-                gold: 50,
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-        }
-
-        function updateGold(amount) {
-            const playerRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
-            playerRef.get().then((doc) => {
-                let currentGold = doc.exists ? (doc.data().gold || 0) : 0;
-                playerRef.update({ gold: currentGold + amount });
-                document.getElementById("player-gold").innerText = currentGold + amount;
-            });
-        }
-
-        function initDMListener() {
-            db.collection("sessions").doc(currentRoom).collection("players")
-                .onSnapshot((snapshot) => {
-                    const listContainer = document.getElementById("dm-player-list");
-                    listContainer.innerHTML = "";
-                    if (snapshot.empty) {
-                        listContainer.innerHTML = '<div class="p-3 bg-slate-950 rounded-lg border border-slate-800 text-slate-400 text-sm">Waiting for players to join...</div>';
-                        return;
-                    }
-                    snapshot.forEach((doc) => {
-                        const data = doc.data();
-                        const item = document.createElement("div");
-                        item.className = "p-3 bg-slate-950 rounded-lg border border-slate-800 flex justify-between items-center";
-                        item.innerHTML = `<span class="font-semibold text-slate-200">${data.name}</span> <span class="text-amber-400 font-mono">${data.gold || 0} Gold</span>`;
-                        listContainer.appendChild(item);
-                    });
-                });
-        }
-    </script>
-</body>
-</html>
