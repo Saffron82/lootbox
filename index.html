@@ -65,11 +65,11 @@
             <h2 class="text-lg font-semibold text-slate-200">Join Tabletop Session</h2>
             <div class="flex flex-col gap-3">
                 <input type="text" id="session-code" placeholder="Session Room Name (e.g., Campaign1)" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
-                <input type="text" id="user-name" placeholder="Your Character Name" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
+                <input type="text" id="user-name" placeholder="Your Name or DM Name" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
                 
-                <!-- Class Selection Dropdown -->
-                <div class="flex flex-col gap-1">
-                    <label class="text-xs text-slate-400 uppercase tracking-wider font-bold">Select Character Class</label>
+                <!-- Class Selection Dropdown (Only relevant for Players) -->
+                <div id="class-select-container" class="flex flex-col gap-1">
+                    <label class="text-xs text-slate-400 uppercase tracking-wider font-bold">Select Character Class (Players Only)</label>
                     <select id="user-class" class="bg-slate-950 border border-slate-700 rounded-lg p-3 text-slate-100 focus:outline-none focus:border-amber-500">
                         <option value="Fighter">Fighter (Heavy Armor, Sword, Shield, Explorer's Pack)</option>
                         <option value="Rogue">Rogue (Leather Armor, Daggers, Burglar's Pack)</option>
@@ -404,7 +404,7 @@
             currentRole = role;
 
             if (!currentRoom || !playerName) {
-                alert("Please enter both a session room name and your character name.");
+                alert("Please enter both a session room name and your name.");
                 return;
             }
 
@@ -418,7 +418,6 @@
             } else {
                 document.getElementById("player-dashboard").classList.remove("hidden");
                 document.getElementById("player-display-name").innerText = playerName;
-                document.getElementById("player-display-class").innerText = playerClass;
                 document.getElementById("active-player-room").innerText = currentRoom;
                 initPlayerSync();
             }
@@ -429,10 +428,9 @@
             playerDocRef = sessionRef.collection("players").doc(playerName);
             
             playerDocRef.get().then((doc) => {
-                const preset = classPresets[playerClass] || classPresets["Fighter"];
-                
                 if (!doc.exists) {
-                    // Create new document with class preset data
+                    // Character ONLY gets class preset items on initial creation
+                    const preset = classPresets[playerClass] || classPresets["Fighter"];
                     playerDocRef.set({
                         name: playerName,
                         charClass: playerClass,
@@ -444,19 +442,8 @@
                         backpack: [...preset.backpack],
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
-                } else {
-                    // If the document already existed but had missing values (like old tests), update it with the class preset
-                    let data = doc.data();
-                    let updatePayload = { charClass: playerClass };
-                    if (data.gp === undefined) updatePayload.gp = preset.gp;
-                    if (data.sp === undefined) updatePayload.sp = preset.sp;
-                    if (data.cp === undefined) updatePayload.cp = preset.cp;
-                    if (!data.equipment || data.equipment.length === 0) updatePayload.equipment = [...preset.equipment];
-                    if (!data.weapons || data.weapons.length === 0) updatePayload.weapons = JSON.parse(JSON.stringify(preset.weapons));
-                    if (!data.backpack || data.backpack.length === 0) updatePayload.backpack = [...preset.backpack];
-                    
-                    playerDocRef.update(updatePayload);
                 }
+                // If character ALREADY exists, do NOTHING to their items or class!
             });
 
             playerDocRef.onSnapshot((doc) => {
@@ -465,7 +452,7 @@
                     document.getElementById("player-gp").innerText = data.gp || 0;
                     document.getElementById("player-sp").innerText = data.sp || 0;
                     document.getElementById("player-cp").innerText = data.cp || 0;
-                    if(data.charClass) {
+                    if (data.charClass) {
                         document.getElementById("player-display-class").innerText = data.charClass;
                     }
                     renderCategoryList("equipment", data.equipment || []);
