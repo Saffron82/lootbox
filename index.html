@@ -163,8 +163,8 @@
                                 <button onclick="quickAddStoreItem('Torch (5)', 5, 'CP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Torches (5 CP)</button>
                                 <button onclick="quickAddStoreItem('Rations (5 days)', 2, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rations (2 GP)</button>
                                 <button onclick="quickAddStoreItem('Hempen Rope 50ft', 1, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Rope (1 GP)</button>
-                                <button onclick="quickAddStoreItem("Explorer's Pack", 10, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Explorer's Pack</button>
-                                <button onclick="quickAddStoreItem("Burglar's Pack", 16, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Burglar's Pack</button>
+                                <button onclick="quickAddStoreItem('Explorer\'s Pack', 10, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Explorer's Pack</button>
+                                <button onclick="quickAddStoreItem('Burglar\'s Pack', 16, 'GP', 'backpack', 'general')" class="bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs px-2 py-1 rounded text-slate-200">+ Burglar's Pack</button>
                                 <button onclick="clearSingleStore('general')" class="bg-slate-800 hover:bg-slate-700 text-red-400 text-xs px-2 py-1 rounded">Clear General</button>
                             </div>
                         </div>
@@ -429,8 +429,10 @@
             playerDocRef = sessionRef.collection("players").doc(playerName);
             
             playerDocRef.get().then((doc) => {
+                const preset = classPresets[playerClass] || classPresets["Fighter"];
+                
                 if (!doc.exists) {
-                    const preset = classPresets[playerClass] || classPresets["Fighter"];
+                    // Create new document with class preset data
                     playerDocRef.set({
                         name: playerName,
                         charClass: playerClass,
@@ -442,6 +444,18 @@
                         backpack: [...preset.backpack],
                         lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
                     });
+                } else {
+                    // If the document already existed but had missing values (like old tests), update it with the class preset
+                    let data = doc.data();
+                    let updatePayload = { charClass: playerClass };
+                    if (data.gp === undefined) updatePayload.gp = preset.gp;
+                    if (data.sp === undefined) updatePayload.sp = preset.sp;
+                    if (data.cp === undefined) updatePayload.cp = preset.cp;
+                    if (!data.equipment || data.equipment.length === 0) updatePayload.equipment = [...preset.equipment];
+                    if (!data.weapons || data.weapons.length === 0) updatePayload.weapons = JSON.parse(JSON.stringify(preset.weapons));
+                    if (!data.backpack || data.backpack.length === 0) updatePayload.backpack = [...preset.backpack];
+                    
+                    playerDocRef.update(updatePayload);
                 }
             });
 
@@ -745,7 +759,6 @@
                 
                 if (!stores.inn) return;
 
-                // Reset all store containers
                 Object.keys(stores).forEach(key => {
                     if (stores[key]) stores[key].innerHTML = "";
                 });
@@ -774,7 +787,6 @@
                     }
                 });
 
-                // Display empty/closed state if no items in that category
                 if (counts.inn === 0) stores.inn.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
                 if (counts.general === 0) stores.general.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
                 if (counts.forge === 0) stores.forge.innerHTML = '<span class="text-xs text-slate-500 italic">Closed.</span>';
