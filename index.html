@@ -19,12 +19,13 @@
     <!-- Firebase Initialization -->
     <script>
       const firebaseConfig = {
-        apiKey: "AIzaSyA...",
+        apiKey: "AIzaSyArfQr3quM1aLp-9FwtQykf4bRo57ajxc",
         authDomain: "lootbox-7162c.firebaseapp.com",
         projectId: "lootbox-7162c",
         storageBucket: "lootbox-7162c.firebasestorage.app",
         messagingSenderId: "128137949582",
-        appId: "1:128137949582:web:956634ae3b7341076774cf"
+        appId: "1:128137949582:web:956634ae3b7341076774df",
+        measurementId: "G-H0434TZQ01"
       };
 
       if (!firebase.apps.length) {
@@ -141,3 +142,26 @@
                 document.getElementById("player-dashboard").classList.remove("hidden");
                 document.getElementById("player-display-name").innerText = playerName;
                 document.getElementById("active-player-room").innerText = currentRoom;
+                initPlayerSync();
+            }
+        }
+
+        function initPlayerSync() {
+            playerDocRef = db.collection("sessions").doc(currentRoom).collection("players").doc(playerName);
+            
+            playerDocRef.get().then((doc) => {
+                if (!doc.exists) {
+                    playerDocRef.set({
+                        name: playerName,
+                        gold: 50,
+                        inventory: ["Health Potion", "Torch", "Rations"],
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+            });
+
+            playerDocRef.onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    document.getElementById("player-gold").innerText = data.gold || 0;
+                    render
