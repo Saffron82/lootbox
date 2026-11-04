@@ -98,11 +98,11 @@
                     <p class="text-sm text-slate-400">Active Session: <span id="active-dm-room" class="text-slate-200 font-mono"></span></p>
                 </div>
 
-                <!-- Treasure Splitter Tool (DM Feature) -->
+                <!-- Treasure Splitter Tool (DM Feature with Mercenaries Support) -->
                 <div class="bg-slate-950 p-4 rounded-lg border border-slate-800 flex flex-col gap-3">
-                    <h3 class="text-md font-semibold text-amber-400">💰 Treasure Splitter (Distribute Loot)</h3>
-                    <p class="text-xs text-slate-400">Enter total loot found. It will be divided equally among all active party players, dropping remainders (taxes/temple).</p>
-                    <div class="grid grid-cols-3 gap-2">
+                    <h3 class="text-md font-semibold text-amber-400">💰 Treasure Splitter (Loot & Mercenaries)</h3>
+                    <p class="text-xs text-slate-400">Dividides loot into equal shares among players + hired mercenaries (no-win, no-fee contracts). Remainder/mercenary shares are discarded.</p>
+                    <div class="grid grid-cols-4 gap-2">
                         <div>
                             <label class="text-[10px] text-slate-400 uppercase font-bold">Total GP</label>
                             <input type="number" id="loot-gp" value="0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-amber-400 font-bold">
@@ -115,9 +115,13 @@
                             <label class="text-[10px] text-slate-400 uppercase font-bold">Total CP</label>
                             <input type="number" id="loot-cp" value="0" min="0" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-amber-700 font-bold">
                         </div>
+                        <div>
+                            <label class="text-[10px] text-indigo-400 uppercase font-bold">Hired Mercs</label>
+                            <input type="number" id="loot-mercs" value="0" min="0" class="w-full bg-slate-900 border border-indigo-700 rounded p-2 text-sm text-indigo-300 font-bold">
+                        </div>
                     </div>
                     <button onclick="splitTreasure()" class="bg-amber-600 hover:bg-amber-500 text-slate-950 font-bold py-2 px-4 rounded text-sm transition-colors mt-1">
-                        Distribute Loot Equally to All Party Members
+                        Split Loot (Players + Mercenaries Shares)
                     </button>
                 </div>
 
@@ -680,12 +684,13 @@
             });
         }
 
-        // DM Control: Split Treasure Equally Among All Active Players
+        // DM Control: Split Treasure with Players + Mercenaries Shares
         function splitTreasure() {
             if (!sessionRef) return;
             let totalGp = parseInt(document.getElementById("loot-gp").value) || 0;
             let totalSp = parseInt(document.getElementById("loot-sp").value) || 0;
             let totalCp = parseInt(document.getElementById("loot-cp").value) || 0;
+            let mercsCount = parseInt(document.getElementById("loot-mercs").value) || 0;
 
             sessionRef.collection("players").get().then((snapshot) => {
                 if (snapshot.empty) {
@@ -694,9 +699,11 @@
                 }
 
                 let playerCount = snapshot.size;
-                let shareGp = Math.floor(totalGp / playerCount);
-                let shareSp = Math.floor(totalSp / playerCount);
-                let shareCp = Math.floor(totalCp / playerCount);
+                let totalShares = playerCount + mercsCount;
+                
+                let shareGp = Math.floor(totalGp / totalShares);
+                let shareSp = Math.floor(totalSp / totalShares);
+                let shareCp = Math.floor(totalCp / totalShares);
 
                 let batch = db.batch();
                 snapshot.docs.forEach((doc) => {
@@ -708,10 +715,11 @@
                 });
 
                 batch.commit().then(() => {
-                    alert(`Loot successfully split among ${playerCount} players!\nEach received: ${shareGp} GP, ${shareSp} SP, ${shareCp} CP.\nRemainders discarded as taxes/temple donations.`);
+                    alert(`Loot split successfully among ${playerCount} players and ${mercsCount} mercenaries (${totalShares} total shares)!\nEach player received: ${shareGp} GP, ${shareSp} SP, ${shareCp} CP.\nMercenaries took their ${mercsCount} share(s) and remainders were discarded.`);
                     document.getElementById("loot-gp").value = 0;
                     document.getElementById("loot-sp").value = 0;
                     document.getElementById("loot-cp").value = 0;
+                    document.getElementById("loot-mercs").value = 0;
                 });
             });
         }
@@ -918,7 +926,6 @@
                 };
                 updatePayload[currencyKey] = currentFunds - cost;
 
-                // If it's lodging or service from the Inn, do NOT add to inventory
                 if (itemType !== 'inn_service') {
                     if (itemType === 'equipment') {
                         let equipment = data.equipment || [];
